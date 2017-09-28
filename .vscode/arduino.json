@@ -1,0 +1,8 @@
+{
+    "sketch": "src/main.ino",
+    "port": "COM3",
+    "board": "esp8266:esp8266:d1",
+    "output": "build",
+    "debugger": "jlink",
+    "configuration": "CpuFrequency=80,UploadSpeed=115200,FlashSize=4M3M"
+}

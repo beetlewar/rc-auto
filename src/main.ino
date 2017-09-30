@@ -1,9 +1,27 @@
+bool initialized = false;
+
 void setup()
 {
     Serial.begin(9600);
+
+    initialized = setupFileSystem() && setupAP("rc-auto", "123qwerty") && setupRcHost();
+
+    if (initialized)
+    {
+        Serial.println("Successfully initialized.");
+    }
+    else
+    {
+        Serial.println("Initialization failed.");
+    }
 }
 
 void loop()
 {
-    delay(1000);
+    if (!initialized)
+    {
+        return;
+    }
+
+    loopRcHost();
 }

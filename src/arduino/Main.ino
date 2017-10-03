@@ -4,7 +4,11 @@ void setup()
 {
     Serial.begin(9600);
 
-    initialized = setupFileSystem() && setupAP("rc-auto", "123qwerty") && setupRcHost();
+    initialized =
+        setupFileSystem() &&
+        setupAP("rc-auto", "123qwerty") &&
+        setupRcHost() &&
+        setupCar();
 
     if (initialized)
     {

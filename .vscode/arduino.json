@@ -1,5 +1,5 @@
 {
-    "sketch": "src/Main.ino",
+    "sketch": "src/arduino/Main.ino",
     "port": "COM3",
     "board": "esp8266:esp8266:d1",
     "output": "build",

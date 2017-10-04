@@ -42,22 +42,28 @@ void handleRoot()
     server.send(200, "text/html", content);
 }
 
+void sendFile(String path, String contentType)
+{
+    Serial.print("Handling file ");
+    Serial.println(path);
+
+    File file = SPIFFS.open(path, "r");
+
+    // File file = readFile<File>("/images/background.jpg");
+
+    server.streamFile(file, contentType);
+
+    file.close();
+}
+
 void handleBackgroundImage()
 {
-    Serial.println("Handling background image.");
-
-    String content = readFileString("/images/background.jpg");
-
-    server.send(200, "text/plain", "hello back image");
+    sendFile("/images/background.jpg", "image/jpeg");
 }
 
 void handleGasImage()
 {
-    Serial.println("Handling gas image.");
-
-    String content = readFileString("/images/gas.png");
-
-    server.send(200, "text/plain", "hello gas image");
+    sendFile("/images/gas.png", "image/png");
 }
 
 void handleGasScript()

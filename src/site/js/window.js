@@ -1,0 +1,4 @@
+this.onmouseup = () => {
+    releaseGas();
+    releaseWheel();
+}

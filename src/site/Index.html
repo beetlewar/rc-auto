@@ -9,7 +9,7 @@
         }
 
         font {
-            color: #3D3D3D;
+            color: #1A1919;
             font-family: "Comic Sans MS";
         }
 
@@ -23,11 +23,18 @@
             opacity: 0.5;
         }
 
-        .rotation-transform {
+        .wheel-transform {
             position: absolute;
             right: 5%;
-            bottom: 10%;
-            width: 30%;
+            bottom: 5%;
+        }
+
+        .wheel-rotation {
+            -webkit-transform: rotate(180deg);
+            -moz-transform: rotate(180deg);
+            -ms-transform: rotate(180deg);
+            -o-transform: rotate(180deg);
+            transform: rotate(180deg);
         }
     </style>
     <title>
@@ -39,27 +46,23 @@
             <div>
                 <center>
                     <h1>
-                        Радиоуправление машинкой
+                        Car remote control
                     </h1>
                 </center>
 
                 <div class="gas-transform">
                     <img id="gas" class="gas-off" src="images/gas.png" alt="gas" height="50%" opacity=0.5 />
                 </div>
-            </div>
 
-            <div>
-                <input id="rotation" type="range" min="-1" max="1" value="0" step="0.05" class="rotation-transform" list="rotations"/>
-                <datalist id="rotations">
-                    <option label="left">-1</option>
-                    <option label="center">0</option>
-                    <option label="right">1</option>
-                </datalist>
+                <div class="wheel-transform">
+                    <img id="wheel" src="images/wheel.png" alt="wheel" height="50%" />
+                </div>
             </div>
         </font>
 
-        <script src="/js/gas.js"></script>
-        <script src="/js/rotation.js"></script>
+        <script src="js/window.js"></script>
+        <script src="js/gas.js"></script>
+        <script src="js/wheel.js"></script>
     </body>
 </head>
 

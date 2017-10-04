@@ -1,4 +1,4 @@
-var gasEnabled = true;
+var gasEnabled = false;
 
 var gas = document.getElementById("gas");
 
@@ -13,13 +13,27 @@ function putGas(value) {
 }
 
 function showGas(gasOn) {
-    gasEnabled = gasOn;
-
-    if (gasEnabled) {
+    if (gasOn) {
         gas.classList.remove("gas-off");
     }
     else {
         gas.classList.add("gas-off");
+    }
+}
+
+function gasOn() {
+    if (!gasEnabled) {
+        showGas(true);
+        putGas(1);
+        gasEnabled = true;
+    }
+}
+
+function releaseGas() {
+    if (gasEnabled) {
+        showGas(false);
+        putGas(0);
+        gasEnabled = false;
     }
 }
 
@@ -28,15 +42,14 @@ gas.ondragstart = () => {
 }
 
 gas.onmousedown = () => {
-    if (!gasEnabled) {
-        putGas(1);
-        showGas(true);
-    }
+    gasOn();
 }
 
-this.onmouseup = () => {
-    if (gasEnabled) {
-        putGas(0);
-        showGas(false);
-    }
+gas.ontouchstart = e => {
+    gasOn();
+    e.preventDefault();
+}
+
+gas.ontouchend = () => {
+    releaseGas();
 }

@@ -15,13 +15,13 @@ void setCarGas(float value)
 {
     int gasValue = (int)(255 * value);
 
-    Serial.print("Setting gas to ");
-    Serial.println(gasValue);
+    printLog("Setting gas to ");
+    printlnLog(gasValue);
 
     analogWrite(gasPin, gasValue);
 }
 
-void setCarRotation(float value)
+void setCarWheel(float value)
 {
     int leftValue = 0;
     int rightValue = 0;
@@ -35,13 +35,13 @@ void setCarRotation(float value)
         rightValue = (int)(255 * value);
     }
 
-    Serial.print("Setting left rotation to ");
-    Serial.println(leftValue);
+    printLog("Setting left wheel to ");
+    printlnLog(leftValue);
 
     analogWrite(leftPin, leftValue);
 
-    Serial.print("Setting right rotation to ");
-    Serial.println(rightValue);
+    printLog("Setting right wheel to ");
+    printlnLog(rightValue);
 
     analogWrite(rightPin, rightValue);
 }

@@ -4,16 +4,7 @@ bool setupFileSystem()
 {
     SPIFFS.begin();
 
-    Serial.println("File system successfully inititalized.");
-
-    Dir dir = SPIFFS.openDir("/");
-    while (dir.next())
-    {
-        Serial.println(dir.fileName());
-        File f = dir.openFile("r");
-        Serial.println(f.size());
-        f.close();
-    }
+    printlnLog("File system successfully inititalized.");
 
     return true;
 }
@@ -24,10 +15,10 @@ String readFileString(String path)
 
     String result = file.readStringUntil('\0');
 
-    Serial.print("Open file at ");
-    Serial.print(path);
-    Serial.print(" result: ");
-    Serial.println(file);
+    printLog("Open file at ");
+    printLog(path);
+    printLog(" result: ");
+    printlnLog(file);
 
     file.close();
 

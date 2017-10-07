@@ -6,17 +6,17 @@ bool setupRcHost()
 {
     server.begin();
 
-    server.onNotFound(handleNotFound);
-
     server.on("/", HTTP_GET, handleRoot);
     server.on("/images/background.jpg", handleBackgroundImage);
     server.on("/images/gas.png", handleGasImage);
+    server.on("/images/wheel.png", handleWheelImage);
+    server.on("/js/window.js", HTTP_GET, handleWindowScript);
     server.on("/js/gas.js", HTTP_GET, handleGasScript);
-    server.on("/js/rotation.js", HTTP_GET, handleRotationScript);
+    server.on("/js/wheel.js", HTTP_GET, handleWheelScript);
     server.on("/api/gas", HTTP_PUT, handleGas);
-    server.on("/api/rotation", HTTP_PUT, handleRotation);
+    server.on("/api/wheel", HTTP_PUT, handleWheel);
 
-    Serial.println("Http server started at port 80.");
+    printlnLog("Http server started at port 80.");
 
     return true;
 }
@@ -28,14 +28,14 @@ void loopRcHost()
 
 void handleNotFound()
 {
-    Serial.println("Handling not found.");
+    printlnLog("Handling not found.");
 
     server.send(404, "text/plain", "Not found");
 }
 
 void handleRoot()
 {
-    Serial.println("Handling index.hml.");
+    printlnLog("Handling index.hml.");
 
     String content = readFileString("/Index.html");
 
@@ -44,12 +44,10 @@ void handleRoot()
 
 void sendFile(String path, String contentType)
 {
-    Serial.print("Handling file ");
-    Serial.println(path);
+    printLog("Handling file ");
+    printlnLog(path);
 
     File file = SPIFFS.open(path, "r");
-
-    // File file = readFile<File>("/images/background.jpg");
 
     server.streamFile(file, contentType);
 
@@ -66,48 +64,61 @@ void handleGasImage()
     sendFile("/images/gas.png", "image/png");
 }
 
+void handleWheelImage(){
+    sendFile("/images/wheel.png", "image/png");
+}
+
+void handleWindowScript()
+{
+    printlnLog("Handling window script.");
+
+    String content = readFileString("/js/window.js");
+
+    server.send(200, "application/javascript", content);
+}
+
 void handleGasScript()
 {
-    Serial.println("Handling gas script.");
+    printlnLog("Handling gas script.");
 
     String content = readFileString("/js/gas.js");
 
     server.send(200, "application/javascript", content);
 }
 
-void handleRotationScript()
+void handleWheelScript()
 {
-    Serial.println("Handling rotation script.");
+    printlnLog("Handling wheel script.");
 
-    String content = readFileString("/js/rotation.js");
+    String content = readFileString("/js/wheel.js");
 
     server.send(200, "application/javascript", content);
 }
 
 void handleGas()
 {
-    Serial.println("Handling API gas.");
+    printlnLog("Handling API gas.");
 
     String gasString = server.arg("gas");
     float gas = gasString.toFloat();
-    Serial.print("gas: ");
-    Serial.println(gas);
+    printLog("gas: ");
+    printlnLog(gas);
 
     setCarGas(gas);
 
     server.send(200);
 }
 
-void handleRotation()
+void handleWheel()
 {
-    Serial.println("Handling API rotation.");
+    printlnLog("Handling API wheel.");
 
-    String rotationString = server.arg("rotation");
-    float rotation = rotationString.toFloat();
-    Serial.print("rotation: ");
-    Serial.println(rotation);
+    String wheelString = server.arg("wheel");
+    float wheel = wheelString.toFloat();
+    printLog("wheel: ");
+    printlnLog(wheel);
 
-    setCarRotation(rotation);
+    setCarWheel(wheel);
 
     server.send(200);
 }

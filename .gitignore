@@ -31,8 +31,9 @@
 *.out
 *.app
 
-# Build
+# arduino
+Log.ino
 /build/
 
-# node_modules
+# node.js
 /src/site/node_modules/

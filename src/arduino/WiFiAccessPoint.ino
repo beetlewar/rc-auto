@@ -6,12 +6,12 @@ bool setupAP(const char *ssid, const char *password)
 
     if (b)
     {
-        Serial.print("Started access point at ");
-        Serial.println(WiFi.softAPIP());
+        printLog("Started access point at ");
+        printlnLog(WiFi.softAPIP());
     }
     else
     {
-        Serial.println("Failed to start access point");
+        printlnLog("Failed to start access point");
     }
 
     return b;

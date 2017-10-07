@@ -2,9 +2,8 @@ bool initialized = false;
 
 void setup()
 {
-    Serial.begin(9600);
-
     initialized =
+        setupLog() &&
         setupFileSystem() &&
         setupAP("rc-auto", "123qwerty") &&
         setupRcHost() &&
@@ -12,11 +11,11 @@ void setup()
 
     if (initialized)
     {
-        Serial.println("Successfully initialized.");
+        printlnLog("Successfully initialized.");
     }
     else
     {
-        Serial.println("Initialization failed.");
+        printlnLog("Initialization failed.");
     }
 }
 

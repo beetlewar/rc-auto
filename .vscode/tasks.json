@@ -4,9 +4,9 @@
         {
             "taskName": "site",
             "type": "shell",
-            "command": "node",
+            "command": "npm",
             "args": [
-                "./src/site/server.js"
+                "start --prefix ./src/site"
             ],
             "group": {
                 "kind": "build",

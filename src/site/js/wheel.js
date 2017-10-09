@@ -11,32 +11,45 @@ const MAX_ROTATION_ANGLE = 90;
 // скорость возврата руля в нейтральное положение, градусов в секунду
 const RETURN_ROTATION_TO_ZERO_SPEED = 180;
 
-setInterval(() => {
-    if (pressed) {
+function findWheelTouch(touches) {
+    for (var i = 0; i < touches.length; i++) {
+        if (touches[i].target == wheelDocument) {
+            return touches[i];
+        }
+    }
+    return null;
+}
+
+wheelDocument.oncontextmenu = () => {
+    return false;
+}
+
+wheelDocument.ondragstart = () => {
+    return false;
+}
+
+wheelDocument.ontouchstart = e => {
+    e.preventDefault();
+
+    pressed = true;
+
+    var touch = findWheelTouch(e.touches);
+
+    var angle = getWheelAngle(touch.clientX, touch.clientY);
+
+    console.log(angle);
+
+    if (angle == NaN) {
         return;
     }
 
-    if (wheelRotationAngle == 0) {
-        return;
-    }
-
-    var angle = Math.min(Math.abs(wheelRotationAngle), RETURN_ROTATION_TO_ZERO_SPEED / 20.0);
-
-    if (angle == 0) {
-        return;
-    }
-
-    if (wheelRotationAngle > 0) {
-        angle = -angle;
-    }
-
-    rotateWheel(angle);
-}, 20);
+    dragAngle = angle;
+}
 
 function getWheelAngle(screenX, screenY) {
     var wheelRect = wheelDocument.getBoundingClientRect();
     var wheelCenterX = wheelRect.left + wheelRect.width / 2;
-    var wheelCenterY = wheelRect.top + wheelDocument.height / 2;
+    var wheelCenterY = wheelRect.top + wheelRect.height / 2;
 
     var dx = screenX - wheelCenterX;
     var dy = (screenY - wheelCenterY) * -1;
@@ -64,6 +77,34 @@ function getWheelAngle(screenX, screenY) {
     }
 
     return angle;
+}
+
+wheelDocument.ontouchmove = e => {
+    e.preventDefault();
+
+    var touch = findWheelTouch(e.touches);
+
+    var angle = getWheelAngle(touch.clientX, touch.clientY);
+
+    if (angle == NaN) {
+        return;
+    }
+
+    var a1 = angle - dragAngle;
+    var a2 = 360 + angle - dragAngle;
+    var a3 = angle - dragAngle - 360;
+
+    if (Math.abs(a1) < Math.abs(a2) && Math.abs(a1) < Math.abs(a3)) {
+        rotateWheel(a1);
+    }
+    else if (Math.abs(a2) < Math.abs(a3) && Math.abs(a2) < Math.abs(a1)) {
+        rotateWheel(a2);
+    }
+    else {
+        rotateWheel(a3);
+    }
+
+    dragAngle = angle;
 }
 
 function rotateWheel(angle) {
@@ -105,67 +146,36 @@ function putWheel() {
     request.send(wheelContent);
 }
 
-function findWheelTouch(touches) {
-    for (var i = 0; i < touches.length; i++) {
-        if (touches[i].target == wheelDocument) {
-            return touches[i];
-        }
-    }
-    return null;
-}
-
-wheelDocument.oncontextmenu = () => {
-    return false;
-}
-
-wheelDocument.ondragstart = () => {
-    return false;
-}
-
-wheelDocument.ontouchstart = e => {
-    e.preventDefault();
-
-    pressed = true;
-
-    var touch = findWheelTouch(e.touches);
-
-    var angle = getWheelAngle(touch.clientX, touch.clientY);
-
-    if (angle == NaN) {
-        return;
-    }
-
-    dragAngle = angle;
-}
-
-wheelDocument.ontouchmove = e => {
-    e.preventDefault();
-
-    var touch = findWheelTouch(e.touches);
-
-    var angle = getWheelAngle(touch.clientX, touch.clientY);
-
-    if (angle == NaN) {
-        return;
-    }
-
-    var a1 = angle - dragAngle;
-    var a2 = 360 + angle - dragAngle;
-    var a3 = angle - dragAngle - 360;
-
-    if (Math.abs(a1) < Math.abs(a2) && Math.abs(a1) < Math.abs(a3)) {
-        rotateWheel(a1);
-    }
-    else if (Math.abs(a2) < Math.abs(a3) && Math.abs(a2) < Math.abs(a1)) {
-        rotateWheel(a2);
-    }
-    else {
-        rotateWheel(a3);
-    }
-
-    dragAngle = angle;
-}
-
 wheelDocument.ontouchend = () => {
     pressed = false;
+    animateReturnToZero(Date.now());
+}
+
+function animateReturnToZero(prevTimeStamp) {
+    setTimeout(() => {
+        if (pressed) {
+            return;
+        }
+
+        if (wheelRotationAngle == 0) {
+            return;
+        }
+
+        var currentTime = Date.now();
+        var elapsed = currentTime - prevTimeStamp;
+
+        var angle = Math.min(Math.abs(wheelRotationAngle), RETURN_ROTATION_TO_ZERO_SPEED / elapsed);
+
+        if (angle == 0) {
+            return;
+        }
+
+        if (wheelRotationAngle > 0) {
+            angle = -angle;
+        }
+
+        rotateWheel(angle);
+
+        animateReturnToZero(currentTime);
+    }, 20);
 }

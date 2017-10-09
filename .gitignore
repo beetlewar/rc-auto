@@ -37,3 +37,5 @@ Log.ino
 
 # node.js
 /src/site/node_modules/
+
+*.log

@@ -1,6 +1,8 @@
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width user-scalable=no" />
+
     <style>
         body {
             background-image: url(images/background.jpg);
@@ -9,13 +11,13 @@
         }
 
         font {
-            color: #1A1919;
+            color: #333333;
             font-family: "Comic Sans MS";
         }
 
         .gas-transform {
             position: absolute;
-            left: 5%;
+            left: 8%;
             bottom: 5%;
         }
 
@@ -25,16 +27,12 @@
 
         .wheel-transform {
             position: absolute;
-            right: 5%;
+            right: 8%;
             bottom: 5%;
         }
 
-        .wheel-rotation {
-            -webkit-transform: rotate(180deg);
-            -moz-transform: rotate(180deg);
-            -ms-transform: rotate(180deg);
-            -o-transform: rotate(180deg);
-            transform: rotate(180deg);
+        .transparent-cell {
+            opacity: 0;
         }
     </style>
     <title>
@@ -43,20 +41,42 @@
 
     <body>
         <font>
-            <div>
+            <div id="contentDiv">
                 <center>
                     <h1>
                         Car remote control
                     </h1>
                 </center>
-
-                <div class="gas-transform">
-                    <img id="gas" class="gas-off" src="images/gas.png" alt="gas" height="50%" opacity=0.5 />
-                </div>
-
-                <div class="wheel-transform">
-                    <img id="wheel" src="images/wheel.png" alt="wheel" height="50%" />
-                </div>
+                <center>
+                    <table id="gasTable" width="5%" height="70%">
+                        <tr>
+                            <td bgcolor=#FF0000/>
+                        </tr>
+                        <tr>
+                            <td bgcolor=#FF5400 />
+                        </tr>
+                        <tr>
+                            <td bgcolor=#FF9400 />
+                        </tr>
+                        <tr>
+                            <td bgcolor=#FFD400 />
+                        </tr>
+                        <tr>
+                            <td bgcolor=#E9FF00 />
+                        </tr>
+                        <tr>
+                            <td bgcolor=#BFFF00 />
+                        </tr>
+                        <tr>
+                            <td bgcolor=#1FED00 />
+                        </tr>
+                        <tr>
+                            <td bgcolor=#00A615 />
+                        </tr>
+                    </table>
+                </center>
+                <img id="gas" class="gas-transform gas-off" src="images/gas.png" alt="gas" opacity=0.5 height="60%" />
+                <img id="wheel" class="wheel-transform" src="images/wheel.png" alt="wheel" height="60%" />
             </div>
         </font>
 

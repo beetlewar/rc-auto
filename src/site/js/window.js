@@ -1,6 +1,16 @@
-window.addEventListener("contextmenu", function (e) { e.preventDefault(); return false; })
+document.body.style.webkitTouchCallout = 'none';
 
-this.onmouseup = () => {
-    releaseGas();
-    releaseWheel();
-}
+document.addEventListener("touchmove", function (e) {
+    e.preventDefault();
+    return false;
+});
+
+window.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+    return false;
+});
+
+
+// document.documentElement.requestFullScreen();
+//document.documentElement.webkitRequestFullScreen();
+//document.documentElement.requestFullScreen();

@@ -4,14 +4,14 @@
         {
             "taskName": "node_server",
             "type": "shell",
-            "command": "npm start --prefix ./src/site",
+            "command": "npm start --prefix ./site",
             "args": [
             ]
         },
         {
             "taskName": "build_site",
             "type": "shell",
-            "command": "npm run build --prefix ./src/site",
+            "command": "npm run build --prefix ./site",
             "args": [
             ],
             "group": {

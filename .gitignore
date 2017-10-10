@@ -38,5 +38,6 @@ Log.ino
 # node.js
 /site/node_modules/
 /site/bin/
+/site/package-lock.json
 
 *.log

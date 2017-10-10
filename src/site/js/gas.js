@@ -3,17 +3,17 @@ var gasElement = document.getElementById("gas");
 dragY = 0;
 gasValue = 0;
 puttingGas = false;
+gasPressed = false;
 gasValueOnServer = 0;
 
-const FULL_GAS_TOUCH_MOVE = 70;
-const MIN_GAS_HEIGHT = 60;
-const MAX_GAS_HEIGHT = 70;
-const MIN_ENGINE_VOLUME = 0.3;
+const FULL_GAS_TOUCH_MOVE = 150;
 
 updateGasTable();
 
 function updateGasTable() {
     var table = document.getElementById("gasTable");
+
+    table.style.visibility = gasPressed ? "visible" : "hidden";
 
     var numVisibleCells = table.rows.length * gasValue;
 
@@ -35,11 +35,15 @@ gasElement.ondragstart = () => {
 }
 
 gasElement.ontouchstart = e => {
+    gasPressed = true;
+
     var touch = findGasTouch(e.touches);
 
     dragY = touch.clientY;
 
     gasValue = 0;
+
+    updateGasTable();
 
     showGas(true);
 
@@ -77,8 +81,6 @@ gasElement.ontouchmove = e => {
 
     gasValue = Math.max(0, Math.min(1.0, gasValue + dGas));
 
-    setGasHeight();
-
     updateGasTable();
 
     putGas();
@@ -86,12 +88,6 @@ gasElement.ontouchmove = e => {
     e.preventDefault();
 
     return false;
-}
-
-function setGasHeight() {
-    var height = MIN_GAS_HEIGHT + (MAX_GAS_HEIGHT - MIN_GAS_HEIGHT) * gasValue;
-
-    gasElement.setAttribute("height", height + "%");
 }
 
 function putGas(value) {
@@ -127,8 +123,8 @@ function putGas(value) {
 }
 
 gasElement.ontouchend = e => {
+    gasPressed = false;
     gasValue = 0;
-    setGasHeight();
     showGas(false);
     putGas();
     updateGasTable();

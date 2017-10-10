@@ -2,22 +2,27 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "node_server",
-            "type": "shell",
-            "command": "npm start --prefix ./site",
-            "args": [
-            ]
-        },
-        {
             "taskName": "build_site",
             "type": "shell",
             "command": "npm run build --prefix ./site",
-            "args": [
-            ],
+            "args": [],
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "taskName": "node_server",
+            "type": "shell",
+            "command": "npm start --prefix ./site",
+            "args": []
+        },
+        {
+            "taskName": "npm_install",
+            "type": "shell",
+            "command": "npm install ./site",
+            "args": [],
+            "problemMatcher": []
         }
     ]
 }

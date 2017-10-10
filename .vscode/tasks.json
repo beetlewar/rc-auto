@@ -2,11 +2,17 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "site",
+            "taskName": "node_server",
             "type": "shell",
-            "command": "npm",
+            "command": "npm start --prefix ./src/site",
             "args": [
-                "start --prefix ./src/site"
+            ]
+        },
+        {
+            "taskName": "build_site",
+            "type": "shell",
+            "command": "npm run build --prefix ./src/site",
+            "args": [
             ],
             "group": {
                 "kind": "build",

@@ -1,21 +1,19 @@
 const FULL_GAS_TOUCH_MOVE = 150;
 
 module.exports = class Gas {
-    constructor() {
+    init() {
         this.dragY = 0;
         this.gasValue = 0;
         this.puttingGas = false;
         this.gasPressed = false;
         this.gasValueOnServer = 0;
-    }
 
-    init() {
         this.gasElement = document.getElementById("gas");
 
-        this.gasElement.ondragstart = this.ondragstart;
-        this.gasElement.ontouchstart = e => { alert("click!") };
-        this.gasElement.ontouchmove = this.ontouchmove;
-        this.gasElement.ontouchend = this.ontouchend;
+        this.gasElement.ondragstart = e => this.ondragstart(e);
+        this.gasElement.ontouchstart = e => this.ontouchstart(e);
+        this.gasElement.ontouchmove = e => this.ontouchmove(e);
+        this.gasElement.ontouchend = e => this.ontouchend(e);
 
         this.updateGasTable();
     }
@@ -40,20 +38,20 @@ module.exports = class Gas {
         }
     }
 
-    ondragstart() {
+    ondragstart(e) {
         return false;
     }
 
     ontouchstart(e) {
-        gasPressed = true;
+        this.gasPressed = true;
 
         var touch = this.findGasTouch(e.touches);
 
-        dragY = touch.clientY;
+        this.dragY = touch.clientY;
 
-        gasValue = 0;
+        this.gasValue = 0;
 
-        updateGasTable();
+        this.updateGasTable();
 
         this.showGas(true);
 
@@ -64,7 +62,7 @@ module.exports = class Gas {
 
     findGasTouch(touches) {
         for (var i = 0; i < touches.length; i++) {
-            if (touches[i].target == gasElement) {
+            if (touches[i].target == this.gasElement) {
                 return touches[i];
             }
         }
@@ -73,57 +71,59 @@ module.exports = class Gas {
 
     showGas(gasOn) {
         if (gasOn) {
-            gasElement.classList.remove("gas-off");
+            this.gasElement.classList.remove("gas-off");
         }
         else {
-            gasElement.classList.add("gas-off");
+            this.gasElement.classList.add("gas-off");
         }
     }
 
     ontouchmove(e) {
-        var touch = findGasTouch(e.touches);
+        var touch = this.findGasTouch(e.touches);
 
-        var dY = dragY - touch.clientY;
+        var dY = this.dragY - touch.clientY;
 
-        dragY = touch.clientY;
+        this.dragY = touch.clientY;
 
         var dGas = dY / FULL_GAS_TOUCH_MOVE;
 
-        gasValue = Math.max(0, Math.min(1.0, gasValue + dGas));
+        this.gasValue = Math.max(0, Math.min(1.0, this.gasValue + dGas));
 
-        updateGasTable();
+        this.updateGasTable();
 
-        putGas();
+        this.putGas();
 
         e.preventDefault();
 
         return false;
     }
 
-    putGas(value) {
-        if (puttingGas) {
+    putGas() {
+        if (this.puttingGas) {
             console.log("putting gas");
             return;
         }
-        if (gasValue == gasValueOnServer) {
+        if (this.gasValue == this.gasValueOnServer) {
             console.log("same gas");
             return;
         }
 
-        puttingGas = true;
+        this.puttingGas = true;
 
-        var pendingGas = gasValue;
+        var pendingGas = this.gasValue;
         var gasContent = "gas=" + pendingGas;
         console.info("putting gas: " + gasContent);
 
         var request = new XMLHttpRequest();
         request.onreadystatechange = () => {
             if (request.readyState == XMLHttpRequest.DONE) {
-                gasValueOnServer = pendingGas;
+                this.gasValueOnServer = pendingGas;
 
-                puttingGas = false;
+                this.puttingGas = false;
 
-                putGas();
+                if (this.gasValue != this.gasValueOnServer) {
+                    this.putGas();
+                }
             }
         }
 
@@ -133,11 +133,11 @@ module.exports = class Gas {
     }
 
     ontouchend(e) {
-        gasPressed = false;
-        gasValue = 0;
-        showGas(false);
-        putGas();
-        updateGasTable();
+        this.gasPressed = false;
+        this.gasValue = 0;
+        this.showGas(false);
+        this.putGas();
+        this.updateGasTable();
 
         e.preventDefault();
 

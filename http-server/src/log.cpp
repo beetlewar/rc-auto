@@ -1,5 +1,7 @@
 #define DEBUG
 
+#include <Arduino.h>
+
 bool setupLog()
 {
 #ifdef DEBUG

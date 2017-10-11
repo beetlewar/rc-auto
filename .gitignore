@@ -34,6 +34,7 @@
 # arduino
 Log.ino
 /http-server/bin/
+/data/
 
 # node.js
 /http-client/node_modules/
@@ -41,3 +42,6 @@ Log.ino
 /http-client/package-lock.json
 
 *.log
+.pioenvs
+.piolibdeps
+.vscode/c_cpp_properties.json

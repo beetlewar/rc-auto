@@ -1,3 +1,14 @@
+#include "Arduino.h"
+
+extern bool setupLog();
+extern bool setupFileSystem();
+extern bool setupAP(const char *ssid, const char *password);
+extern bool setupRcHost();
+extern bool setupCar();
+extern void printLog(String s);
+extern void printlnLog(String s);
+extern void loopRcHost();
+
 bool initialized = false;
 
 void setup()

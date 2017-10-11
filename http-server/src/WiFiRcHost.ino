@@ -10,9 +10,7 @@ bool setupRcHost()
     server.on("/images/background.jpg", handleBackgroundImage);
     server.on("/images/gas.png", handleGasImage);
     server.on("/images/wheel.png", handleWheelImage);
-    server.on("/js/window.js", HTTP_GET, handleWindowScript);
-    server.on("/js/gas.js", HTTP_GET, handleGasScript);
-    server.on("/js/wheel.js", HTTP_GET, handleWheelScript);
+    server.on("/app.js", HTTP_GET, handleAppScript);
     server.on("/api/gas", HTTP_PUT, handleGas);
     server.on("/api/wheel", HTTP_PUT, handleWheel);
 
@@ -28,14 +26,14 @@ void loopRcHost()
 
 void handleNotFound()
 {
-    printlnLog("Handling not found.");
+    printlnLog("Handling 'not found'.");
 
     server.send(404, "text/plain", "Not found");
 }
 
 void handleRoot()
 {
-    printlnLog("Handling index.hml.");
+    printlnLog("Handling Index.html.");
 
     String content = readFileString("/Index.html");
 
@@ -64,33 +62,16 @@ void handleGasImage()
     sendFile("/images/gas.png", "image/png");
 }
 
-void handleWheelImage(){
+void handleWheelImage()
+{
     sendFile("/images/wheel.png", "image/png");
 }
 
-void handleWindowScript()
+void handleAppScript()
 {
-    printlnLog("Handling window script.");
+    printlnLog("Handling app script.");
 
-    String content = readFileString("/js/window.js");
-
-    server.send(200, "application/javascript", content);
-}
-
-void handleGasScript()
-{
-    printlnLog("Handling gas script.");
-
-    String content = readFileString("/js/gas.js");
-
-    server.send(200, "application/javascript", content);
-}
-
-void handleWheelScript()
-{
-    printlnLog("Handling wheel script.");
-
-    String content = readFileString("/js/wheel.js");
+    String content = readFileString("/app.js");
 
     server.send(200, "application/javascript", content);
 }

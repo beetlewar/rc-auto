@@ -33,11 +33,11 @@
 
 # arduino
 Log.ino
-/build/
+/http-server/bin/
 
 # node.js
-/site/node_modules/
-/site/bin/
-/site/package-lock.json
+/http-client/node_modules/
+/http-client/bin/
+/http-client/package-lock.json
 
 *.log

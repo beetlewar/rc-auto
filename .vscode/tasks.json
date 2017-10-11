@@ -2,25 +2,20 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "build_site",
+            "taskName": "build_client",
             "type": "shell",
-            "command": "npm run build --prefix ./site",
+            "command": "npm run build --prefix ./http-client",
             "args": [],
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
+            },
+            "problemMatcher": []
         },
         {
-            "taskName": "node_server",
+            "taskName": "run_server",
             "type": "shell",
-            "command": "npm start --prefix ./site",
-            "args": []
-        },
-        {
-            "taskName": "npm_install",
-            "type": "shell",
-            "command": "npm install ./site",
+            "command": "npm start --prefix ./http-client",
             "args": [],
             "problemMatcher": []
         }

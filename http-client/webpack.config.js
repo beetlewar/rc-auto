@@ -1,11 +1,14 @@
 const path = require("path");
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+
+let buildPath = path.resolve(__dirname, "bin");
 
 module.exports = {
     entry: "./src/js/main.js",
     output: {
         filename: "app.js",
-        path: path.resolve(__dirname, "bin")
+        path: buildPath
     },
     module: {
         loaders: [
@@ -17,6 +20,7 @@ module.exports = {
         ]
     },
     plugins: [
+        new CleanWebpackPlugin(buildPath),
         new CopyWebpackPlugin([
             { from: "src/images", to: "images" },
             { from: "src/Index.html" }

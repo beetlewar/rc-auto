@@ -1,113 +1,103 @@
-#include "ESP8266WebServer.h"
-#include "FS.h"
+#include "Includes.h"
 
-extern void printLog(String s);
-extern void printlnLog(String s);
-extern void printlnLog(float f);
-extern String readFileString(String path);
-extern void setCarWheel(float value);
-extern void setCarGas(float value);
-
-ESP8266WebServer server(80);
-
-void loopRcHost()
+WiFiRcHost::WiFiRcHost(Logger *logger, FileSystem *fileSystem, Car *car)
 {
-    server.handleClient();
+    _logger = logger;
+    _fileSystem = fileSystem;
+    _car = car;
 }
 
-void handleNotFound()
+void WiFiRcHost::loop()
 {
-    printlnLog("Handling 'not found'.");
-
-    server.send(404, "text/plain", "Not found");
+    _server.handleClient();
 }
 
-void handleRoot()
+bool WiFiRcHost::setup()
 {
-    printlnLog("Handling Index.html.");
+    _server.begin();
 
-    String content = readFileString("/Index.html");
+    _server.on("/", HTTP_GET, std::bind(&WiFiRcHost::handleRoot, this));
+    _server.on("/images/background.jpg", std::bind(&WiFiRcHost::handleBackgroundImage, this));
+    _server.on("/images/gas.png", std::bind(&WiFiRcHost::handleGasImage, this));
+    _server.on("/images/wheel.png", std::bind(&WiFiRcHost::handleWheelImage, this));
+    _server.on("/app.js", HTTP_GET, std::bind(&WiFiRcHost::handleAppScript, this));
+    _server.on("/api/gas", HTTP_PUT, std::bind(&WiFiRcHost::handleGas, this));
+    _server.on("/api/wheel", HTTP_PUT, std::bind(&WiFiRcHost::handleWheel, this));
 
-    server.send(200, "text/html", content);
+    _logger->println("Http server started at port 80.");
+
+    return true;
 }
 
-void sendFile(String path, String contentType)
+void WiFiRcHost::handleRoot()
 {
-    printLog("Handling file ");
-    printlnLog(path);
+    _logger->println("Handling Index.html.");
+
+    String content = _fileSystem->readAsString("/Index.html");
+
+    _server.send(200, "text/html", content);
+}
+
+void WiFiRcHost::sendFile(String path, String contentType)
+{
+    _logger->print("Handling file ");
+    _logger->println(path);
 
     File file = SPIFFS.open(path, "r");
 
-    server.streamFile(file, contentType);
+    _server.streamFile(file, contentType);
 
     file.close();
 }
 
-void handleBackgroundImage()
+void WiFiRcHost::handleBackgroundImage()
 {
     sendFile("/images/background.jpg", "image/jpeg");
 }
 
-void handleGasImage()
+void WiFiRcHost::handleGasImage()
 {
     sendFile("/images/gas.png", "image/png");
 }
 
-void handleWheelImage()
+void WiFiRcHost::handleWheelImage()
 {
     sendFile("/images/wheel.png", "image/png");
 }
 
-void handleAppScript()
+void WiFiRcHost::handleAppScript()
 {
-    printlnLog("Handling app script.");
+    _logger->println("Handling app script.");
 
-    String content = readFileString("/app.js");
+    String content = _fileSystem->readAsString("/app.js");
 
-    server.send(200, "application/javascript", content);
+    _server.send(200, "application/javascript", content);
 }
 
-void handleGas()
+void WiFiRcHost::handleGas()
 {
-    printlnLog("Handling API gas.");
+    _logger->println("Handling API gas.");
 
-    String gasString = server.arg("gas");
+    String gasString = _server.arg("gas");
     float gas = gasString.toFloat();
-    printLog("gas: ");
-    printlnLog(gas);
+    _logger->print("gas: ");
+    _logger->println(gas);
 
-    setCarGas(gas);
+    _car->setGas(gas);
 
-    server.send(200);
+    _server.send(200);
 }
 
-void handleWheel()
+void WiFiRcHost::handleWheel()
 {
-    printlnLog("Handling API wheel.");
+    _logger->println("Handling API wheel.");
 
-    String wheelString = server.arg("wheel");
+    String wheelString = _server.arg("wheel");
     float wheel = wheelString.toFloat();
-    printLog("wheel: ");
-    printlnLog(wheel);
+    _logger->print("wheel: ");
+    _logger->println(wheel);
 
-    setCarWheel(wheel);
+    _car->setWheel(wheel);
 
-    server.send(200);
-}
-
-bool setupRcHost()
-{
-    server.begin();
-
-    server.on("/", HTTP_GET, handleRoot);
-    server.on("/images/background.jpg", handleBackgroundImage);
-    server.on("/images/gas.png", handleGasImage);
-    server.on("/images/wheel.png", handleWheelImage);
-    server.on("/app.js", HTTP_GET, handleAppScript);
-    server.on("/api/gas", HTTP_PUT, handleGas);
-    server.on("/api/wheel", HTTP_PUT, handleWheel);
-
-    printlnLog("Http server started at port 80.");
-
-    return true;
+    _server.send(200);
 }

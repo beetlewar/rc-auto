@@ -1,32 +1,29 @@
-#include "Arduino.h"
-
-extern bool setupLog();
-extern bool setupFileSystem();
-extern bool setupAP(const char *ssid, const char *password);
-extern bool setupRcHost();
-extern bool setupCar();
-extern void printLog(String s);
-extern void printlnLog(String s);
-extern void loopRcHost();
+#include "Includes.h"
 
 bool initialized = false;
+
+Logger logger;
+FileSystem fileSystem(&logger);
+WiFiAccessPoint accessPoint(&logger);
+Car car(&logger);
+WiFiRcHost rcHost(&logger, &fileSystem, &car);
 
 void setup()
 {
     initialized =
-        setupLog() &&
-        setupFileSystem() &&
-        setupAP("rc-auto", "123qwerty") &&
-        setupRcHost() &&
-        setupCar();
+        logger.setup(9600) &&
+        fileSystem.setup() &&
+        accessPoint.setup("rc-auto", "123qwerty") &&
+        car.setup() &&
+        rcHost.setup();
 
     if (initialized)
     {
-        printlnLog("Successfully initialized.");
+        logger.println("Successfully initialized.");
     }
     else
     {
-        printlnLog("Initialization failed.");
+        logger.println("Initialization failed.");
     }
 }
 
@@ -37,5 +34,5 @@ void loop()
         return;
     }
 
-    loopRcHost();
+    rcHost.loop();
 }

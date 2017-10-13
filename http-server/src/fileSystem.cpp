@@ -1,28 +1,29 @@
-#include "FS.h"
+#include "Includes.h"
 
-extern void printLog(String s);
-extern void printlnLog(String s);
-extern void printlnLog(float f);
+FileSystem::FileSystem(Logger *logger)
+{
+    _logger = logger;
+}
 
-bool setupFileSystem()
+bool FileSystem::setup()
 {
     SPIFFS.begin();
 
-    printlnLog("File system successfully inititalized.");
+    _logger->println("File system successfully inititalized.");
 
     return true;
 }
 
-String readFileString(String path)
+String FileSystem::readAsString(String path)
 {
     File file = SPIFFS.open(path, "r");
 
     String result = file.readStringUntil('\0');
 
-    printLog("Open file at ");
-    printLog(path);
-    printLog(" result: ");
-    printlnLog(file.size());
+    _logger->print("Open file at ");
+    _logger->print(path);
+    _logger->print(" result: ");
+    _logger->println((long)file.size());
 
     file.close();
 

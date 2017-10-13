@@ -1,20 +1,22 @@
-#include "ESP8266WiFi.h"
+#include "Includes.h"
 
-extern void printLog(String s);
-extern void printlnLog(String s);
+WiFiAccessPoint::WiFiAccessPoint(Logger *logger)
+{
+    _logger = logger;
+}
 
-bool setupAP(const char *ssid, const char *password)
+bool WiFiAccessPoint::setup(const char *ssid, const char *password)
 {
     bool b = WiFi.softAP(ssid, password);
 
     if (b)
     {
-        printLog("Started access point at ");
-        printlnLog(WiFi.softAPIP().toString());
+        _logger->print("Started access point at ");
+        _logger->println(WiFi.softAPIP().toString());
     }
     else
     {
-        printlnLog("Failed to start access point");
+        _logger->println("Failed to start access point");
     }
 
     return b;

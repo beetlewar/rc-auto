@@ -1,14 +1,15 @@
-#include "Arduino.h"
-
-extern void printLog(String s);
-extern void printlnLog(String s);
-extern void printlnLog(float f);
+#include "Includes.h"
 
 const int leftPin = D9;
 const int rightPin = D10;
 const int gasPin = D11;
 
-bool setupCar()
+Car::Car(Logger *logger)
+{
+    _logger = logger;
+}
+
+bool Car::setup()
 {
     pinMode(leftPin, OUTPUT);
     pinMode(rightPin, OUTPUT);
@@ -17,37 +18,37 @@ bool setupCar()
     return true;
 }
 
-void setCarGas(float value)
+void Car::setGas(float gas)
 {
-    int gasValue = (int)(255 * value);
+    int analogGas = (int)(255 * gas);
 
-    printLog("Setting gas to ");
-    printlnLog(gasValue);
+    _logger->print("Setting gas to ");
+    _logger->println(analogGas);
 
-    analogWrite(gasPin, gasValue);
+    analogWrite(gasPin, analogGas);
 }
 
-void setCarWheel(float value)
+void Car::setWheel(float wheel)
 {
-    int leftValue = 0;
-    int rightValue = 0;
+    int leftAnalogWheel = 0;
+    int rightAnalogValue = 0;
 
-    if (value < 0)
+    if (wheel < 0)
     {
-        leftValue = (int)(-255 * value);
+        leftAnalogWheel = (int)(-255 * wheel);
     }
-    else if (value > 0)
+    else if (wheel > 0)
     {
-        rightValue = (int)(255 * value);
+        rightAnalogValue = (int)(255 * wheel);
     }
 
-    printLog("Setting left wheel to ");
-    printlnLog(leftValue);
+    _logger->print("Setting left wheel to ");
+    _logger->println(leftAnalogWheel);
 
-    analogWrite(leftPin, leftValue);
+    analogWrite(leftPin, leftAnalogWheel);
 
-    printLog("Setting right wheel to ");
-    printlnLog(rightValue);
+    _logger->print("Setting right wheel to ");
+    _logger->println(rightAnalogValue);
 
-    analogWrite(rightPin, rightValue);
+    analogWrite(rightPin, rightAnalogValue);
 }

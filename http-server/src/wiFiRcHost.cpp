@@ -1,23 +1,14 @@
-#include <ESP8266WebServer.h>
+#include "ESP8266WebServer.h"
+#include "FS.h"
+
+extern void printLog(String s);
+extern void printlnLog(String s);
+extern void printlnLog(float f);
+extern String readFileString(String path);
+extern void setCarWheel(float value);
+extern void setCarGas(float value);
 
 ESP8266WebServer server(80);
-
-bool setupRcHost()
-{
-    server.begin();
-
-    server.on("/", HTTP_GET, handleRoot);
-    server.on("/images/background.jpg", handleBackgroundImage);
-    server.on("/images/gas.png", handleGasImage);
-    server.on("/images/wheel.png", handleWheelImage);
-    server.on("/app.js", HTTP_GET, handleAppScript);
-    server.on("/api/gas", HTTP_PUT, handleGas);
-    server.on("/api/wheel", HTTP_PUT, handleWheel);
-
-    printlnLog("Http server started at port 80.");
-
-    return true;
-}
 
 void loopRcHost()
 {
@@ -102,4 +93,21 @@ void handleWheel()
     setCarWheel(wheel);
 
     server.send(200);
+}
+
+bool setupRcHost()
+{
+    server.begin();
+
+    server.on("/", HTTP_GET, handleRoot);
+    server.on("/images/background.jpg", handleBackgroundImage);
+    server.on("/images/gas.png", handleGasImage);
+    server.on("/images/wheel.png", handleWheelImage);
+    server.on("/app.js", HTTP_GET, handleAppScript);
+    server.on("/api/gas", HTTP_PUT, handleGas);
+    server.on("/api/wheel", HTTP_PUT, handleWheel);
+
+    printlnLog("Http server started at port 80.");
+
+    return true;
 }

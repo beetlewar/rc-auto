@@ -1,3 +1,9 @@
+#include "Arduino.h"
+
+extern void printLog(String s);
+extern void printlnLog(String s);
+extern void printlnLog(float f);
+
 const int leftPin = D9;
 const int rightPin = D10;
 const int gasPin = D11;

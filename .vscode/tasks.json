@@ -18,6 +18,17 @@
             "command": "npm start --prefix ./http-client",
             "args": [],
             "problemMatcher": []
+        },
+        {
+            "type": "PlatformIO",
+            "args": [
+                "run",
+                "--target",
+                "uploadfs"
+            ],
+            "problemMatcher": [
+                "$platformio"
+            ]
         }
     ]
 }

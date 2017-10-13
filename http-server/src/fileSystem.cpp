@@ -1,5 +1,9 @@
 #include "FS.h"
 
+extern void printLog(String s);
+extern void printlnLog(String s);
+extern void printlnLog(float f);
+
 bool setupFileSystem()
 {
     SPIFFS.begin();
@@ -18,7 +22,7 @@ String readFileString(String path)
     printLog("Open file at ");
     printLog(path);
     printLog(" result: ");
-    printlnLog(file);
+    printlnLog(file.size());
 
     file.close();
 

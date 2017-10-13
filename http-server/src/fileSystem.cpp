@@ -14,18 +14,14 @@ bool FileSystem::setup()
     return true;
 }
 
-String FileSystem::readAsString(String path)
+File FileSystem::openRead(String path)
 {
     File file = SPIFFS.open(path, "r");
 
-    String result = file.readStringUntil('\0');
-
-    _logger->print("Open file at ");
+    _logger->print("Opened file at ");
     _logger->print(path);
-    _logger->print(" result: ");
+    _logger->print(", size: ");
     _logger->println((long)file.size());
 
-    file.close();
-
-    return result;
+    return file;
 }

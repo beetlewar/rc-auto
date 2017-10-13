@@ -4,33 +4,35 @@
 
 class WiFiRcHost
 {
-  private:
-    ESP8266WebServer _server;
-    Logger *_logger;
-    FileSystem *_fileSystem;
-    Car *_car;
+private:
+  ESP8266WebServer _server;
+  Logger *_logger;
+  FileSystem *_fileSystem;
+  Car *_car;
 
-  public:
-    WiFiRcHost(Logger *logger, FileSystem *fileSystem, Car *car);
+public:
+  WiFiRcHost(Logger *logger, FileSystem *fileSystem, Car *car);
 
-    bool setup();
+  bool setup();
 
-    void loop();
+  void loop();
 
-  private:
-    void handleRoot();
+private:
+  void handleRoot();
 
-    void sendFile(String path, String contentType);
+  void handleBackgroundImage();
 
-    void handleBackgroundImage();
+  void handleGasImage();
 
-    void handleGasImage();
+  void handleWheelImage();
 
-    void handleWheelImage();
+  void handleAppScript();
 
-    void handleAppScript();
+  void handleGas();
 
-    void handleGas();
+  void handleWheel();
 
-    void handleWheel();
+  void sendFile(String path, String contentType);
+
+  String readFileAsString(String path);
 };

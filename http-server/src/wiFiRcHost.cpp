@@ -33,21 +33,9 @@ void WiFiRcHost::handleRoot()
 {
     _logger->println("Handling Index.html.");
 
-    String content = _fileSystem->readAsString("/Index.html");
+    String content = readFileAsString("/Index.html");
 
     _server.send(200, "text/html", content);
-}
-
-void WiFiRcHost::sendFile(String path, String contentType)
-{
-    _logger->print("Handling file ");
-    _logger->println(path);
-
-    File file = SPIFFS.open(path, "r");
-
-    _server.streamFile(file, contentType);
-
-    file.close();
 }
 
 void WiFiRcHost::handleBackgroundImage()
@@ -69,7 +57,7 @@ void WiFiRcHost::handleAppScript()
 {
     _logger->println("Handling app script.");
 
-    String content = _fileSystem->readAsString("/app.js");
+    String content = readFileAsString("/app.js");
 
     _server.send(200, "application/javascript", content);
 }
@@ -100,4 +88,27 @@ void WiFiRcHost::handleWheel()
     _car->setWheel(wheel);
 
     _server.send(200);
+}
+
+void WiFiRcHost::sendFile(String path, String contentType)
+{
+    _logger->print("Handling file ");
+    _logger->println(path);
+
+    File file = _fileSystem->openRead(path);
+
+    _server.streamFile(file, contentType);
+
+    file.close();
+}
+
+String WiFiRcHost::readFileAsString(String path)
+{
+    File file = _fileSystem->openRead(path);
+
+    String result = file.readStringUntil('\0');
+
+    file.close();
+
+    return result;
 }

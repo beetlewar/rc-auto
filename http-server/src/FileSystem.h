@@ -12,5 +12,5 @@ class FileSystem
 
     bool setup();
 
-    String readAsString(String path);
+    File openRead(String path);
 };

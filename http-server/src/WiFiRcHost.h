@@ -6,6 +6,8 @@ class WiFiRcHost
 {
 private:
   ESP8266WebServer _server;
+  DNSServer _dnsServer;
+
   Logger *_logger;
   FileSystem *_fileSystem;
   Car *_car;

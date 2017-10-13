@@ -1,5 +1,8 @@
 #include "Includes.h"
 
+const byte DNS_PORT = 53;
+const String DNS = "www.rc-host.ru";
+
 WiFiRcHost::WiFiRcHost(Logger *logger, FileSystem *fileSystem, Car *car)
 {
     _logger = logger;
@@ -9,11 +12,18 @@ WiFiRcHost::WiFiRcHost(Logger *logger, FileSystem *fileSystem, Car *car)
 
 void WiFiRcHost::loop()
 {
+    _dnsServer.processNextRequest();
     _server.handleClient();
 }
 
 bool WiFiRcHost::setup()
 {
+    _dnsServer.setErrorReplyCode(DNSReplyCode::ServerFailure);
+    _dnsServer.start(DNS_PORT, DNS, IPAddress(192, 168, 4, 1));
+
+    _logger->print("DNS: ");
+    _logger->println(DNS);
+
     _server.begin();
 
     _server.on("/", HTTP_GET, std::bind(&WiFiRcHost::handleRoot, this));

@@ -6,8 +6,8 @@
 #include "FS.h"
 #include "DNSServer.h"
 
-#include "Logger.h"
-#include "Car.h"
-#include "FileSystem.h"
-#include "WiFiAccessPoint.h"
-#include "WiFiRcHost.h"
+#include "adapter\headers\Logger.h"
+#include "domain\headers\Car.h"
+#include "adapter\headers\FileSystem.h"
+#include "adapter\headers\WiFiAccessPoint.h"
+#include "adapter\headers\WiFiRcHost.h"

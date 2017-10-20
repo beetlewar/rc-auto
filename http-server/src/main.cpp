@@ -2,28 +2,34 @@
 
 bool initialized = false;
 
-Logger logger;
-FileSystem fileSystem(&logger);
-WiFiAccessPoint accessPoint(&logger);
-Car car(&logger);
-WiFiRcHost rcHost(&logger, &fileSystem, &car);
+Logger *logger = NULL;
+FileSystem *fileSystem = NULL;
+WiFiAccessPoint *accessPoint = NULL;
+Car *car = NULL;
+WiFiRcHost *rcHost = NULL;
 
 void setup()
 {
+    logger = new Logger();
+    fileSystem = new FileSystem(logger);
+    accessPoint = new WiFiAccessPoint(logger);
+    car = new Car(logger);
+    rcHost = new WiFiRcHost(logger, fileSystem, car);
+
     initialized =
-        logger.setup(9600) &&
-        fileSystem.setup() &&
-        accessPoint.setup("rc-auto", "123qwerty") &&
-        car.setup() &&
-        rcHost.setup();
+        logger->setup(9600) &&
+        fileSystem->setup() &&
+        accessPoint->setup("rc-auto", "123qwerty") &&
+        car->setup() &&
+        rcHost->setup();
 
     if (initialized)
     {
-        logger.println("Successfully initialized.");
+        logger->println("Successfully initialized.");
     }
     else
     {
-        logger.println("Initialization failed.");
+        logger->println("Initialization failed.");
     }
 }
 
@@ -34,5 +40,5 @@ void loop()
         return;
     }
 
-    rcHost.loop();
+    rcHost->loop();
 }

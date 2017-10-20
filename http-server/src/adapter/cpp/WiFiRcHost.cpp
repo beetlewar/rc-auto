@@ -1,7 +1,7 @@
-#include "Includes.h"
+#include "..\..\Includes.h"
 
 const byte DNS_PORT = 53;
-const String DNS = "www.rc-host.ru";
+const String DNS = "www.rchost.ru";
 
 WiFiRcHost::WiFiRcHost(Logger *logger, FileSystem *fileSystem, Car *car)
 {

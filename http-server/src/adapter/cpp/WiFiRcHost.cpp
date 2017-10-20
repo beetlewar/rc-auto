@@ -3,11 +3,11 @@
 const byte DNS_PORT = 53;
 const String DNS = "www.rchost.ru";
 
-WiFiRcHost::WiFiRcHost(Logger *logger, FileSystem *fileSystem, Car *car)
+WiFiRcHost::WiFiRcHost(Logger *logger, FileSystem *fileSystem, AbstractCarMessageHandler *carMessageHandler)
 {
     _logger = logger;
     _fileSystem = fileSystem;
-    _car = car;
+    _carMessageHandler = carMessageHandler;
 }
 
 void WiFiRcHost::loop()
@@ -81,7 +81,7 @@ void WiFiRcHost::handleGas()
     _logger->print("gas: ");
     _logger->println(gas);
 
-    _car->setGas(gas);
+    _carMessageHandler->publishGas(gas);
 
     _server.send(200);
 }
@@ -95,7 +95,7 @@ void WiFiRcHost::handleWheel()
     _logger->print("wheel: ");
     _logger->println(wheel);
 
-    _car->setWheel(wheel);
+    _carMessageHandler->publishWheelRotation(wheel);
 
     _server.send(200);
 }

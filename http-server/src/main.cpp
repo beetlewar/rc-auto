@@ -5,6 +5,7 @@ bool initialized = false;
 Logger *logger = NULL;
 FileSystem *fileSystem = NULL;
 WiFiAccessPoint *accessPoint = NULL;
+AbstractCarMessageHandler *carMessageHandler = NULL;
 Car *car = NULL;
 WiFiRcHost *rcHost = NULL;
 
@@ -14,7 +15,8 @@ void setup()
     fileSystem = new FileSystem(logger);
     accessPoint = new WiFiAccessPoint(logger);
     car = new Car(logger);
-    rcHost = new WiFiRcHost(logger, fileSystem, car);
+    carMessageHandler = new CarMessageHandler(car);
+    rcHost = new WiFiRcHost(logger, fileSystem, carMessageHandler);
 
     initialized =
         logger->setup(9600) &&

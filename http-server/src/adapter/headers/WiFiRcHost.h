@@ -10,10 +10,10 @@ private:
 
   Logger *_logger;
   FileSystem *_fileSystem;
-  Car *_car;
+  AbstractCarMessageHandler *_carMessageHandler;
 
 public:
-  WiFiRcHost(Logger *logger, FileSystem *fileSystem, Car *car);
+  WiFiRcHost(Logger *logger, FileSystem *fileSystem, AbstractCarMessageHandler *carMessageHandler);
 
   bool setup();
 

@@ -8,6 +8,8 @@
 
 #include "adapter\headers\Logger.h"
 #include "domain\headers\Car.h"
+#include "application\headers\AbstractCarMessageHandler.h"
+#include "application\headers\CarMessageHandler.h"
 #include "adapter\headers\FileSystem.h"
 #include "adapter\headers\WiFiAccessPoint.h"
 #include "adapter\headers\WiFiRcHost.h"

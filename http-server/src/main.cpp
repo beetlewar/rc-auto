@@ -1,5 +1,7 @@
 #include "Includes.h"
 
+#ifndef UNIT_TEST
+
 bool initialized = false;
 
 Logger *logger = NULL;
@@ -54,3 +56,5 @@ void loop()
 
     rcHost->loop();
 }
+
+#endif

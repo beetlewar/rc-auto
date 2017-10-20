@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "build_client",
+            "taskName": "client_build",
             "type": "shell",
             "command": "npm run build --prefix ./http-client",
             "args": [],
@@ -13,18 +13,29 @@
             "problemMatcher": []
         },
         {
-            "taskName": "run_server",
+            "taskName": "server_run",
             "type": "shell",
             "command": "npm start --prefix ./http-client",
             "args": [],
             "problemMatcher": []
         },
         {
+            "taskName": "spiffs_upload",
             "type": "PlatformIO",
             "args": [
                 "run",
                 "--target",
                 "uploadfs"
+            ],
+            "problemMatcher": [
+                "$platformio"
+            ]
+        },
+        {
+            "taskName": "server_test",
+            "type": "PlatformIO",
+            "args": [
+                "test"
             ],
             "problemMatcher": [
                 "$platformio"

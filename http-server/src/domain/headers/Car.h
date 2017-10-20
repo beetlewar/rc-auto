@@ -4,17 +4,15 @@
 
 class Car
 {
-  private:
-    Logger *_logger;
-    float _gas;
-    float _wheel;
+private:
+  Logger *_logger;
+  AbstractWheel *_wheel;
+  AbstractEngine *_engine;
 
-  public:
-    Car(Logger *logger);
+public:
+  Car(Logger *logger, AbstractWheel *wheel, AbstractEngine *engine);
 
-    bool setup();
+  void setGas(float gas);
 
-    void setGas(float gas);
-
-    void setWheel(float wheel);
+  void setWheel(float wheel);
 };

@@ -6,15 +6,24 @@ Logger *logger = NULL;
 FileSystem *fileSystem = NULL;
 WiFiAccessPoint *accessPoint = NULL;
 AbstractCarMessageHandler *carMessageHandler = NULL;
+AbstractWheel *wheel = NULL;
+AbstractEngine *engine = NULL;
 Car *car = NULL;
 WiFiRcHost *rcHost = NULL;
 
 void setup()
 {
     logger = new Logger();
+
+    LedBasedWheel *concreteWheel = new LedBasedWheel(logger);
+    LedBasedEngine *concreteEngine = new LedBasedEngine(logger);
+
+    wheel = concreteWheel;
+    engine = concreteEngine;
+
     fileSystem = new FileSystem(logger);
     accessPoint = new WiFiAccessPoint(logger);
-    car = new Car(logger);
+    car = new Car(logger, wheel, engine);
     carMessageHandler = new CarMessageHandler(car);
     rcHost = new WiFiRcHost(logger, fileSystem, carMessageHandler);
 
@@ -22,7 +31,8 @@ void setup()
         logger->setup(9600) &&
         fileSystem->setup() &&
         accessPoint->setup("rc-auto", "123qwerty") &&
-        car->setup() &&
+        concreteEngine->setup() &&
+        concreteWheel->setup() &&
         rcHost->setup();
 
     if (initialized)

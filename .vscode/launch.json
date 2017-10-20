@@ -6,8 +6,8 @@
             "request": "launch",
             "cwd": "${workspaceRoot}",
             "name": "PlatformIO Debugger",
-            "target": "c:/temp/1/rc-auto/http-server/.pioenvs/d1/firmware.elf",
-            "gdbpath": "C:/Users/iprokofiev/.platformio/penv/Scripts/piodebuggdb",
+            "target": "c:/code/arduino/rc-auto/http-server/.pioenvs/d1/firmware.elf",
+            "gdbpath": "C:/Users/admmin/.platformio/penv/Scripts/piodebuggdb",
             "autorun": [ "source .pioinit" ]
         }
     ]

@@ -5,6 +5,7 @@
 #include "ESP8266WebServer.h"
 #include "FS.h"
 #include "DNSServer.h"
+#include "Servo.h"
 
 #include "adapter\headers\Logger.h"
 #include "domain\headers\AbstractWheel.h"
@@ -15,5 +16,5 @@
 #include "adapter\headers\FileSystem.h"
 #include "adapter\headers\WiFiAccessPoint.h"
 #include "adapter\headers\WiFiRcHost.h"
-#include "adapter\headers\LedBasedWheel.h"
-#include "adapter\headers\LedBasedEngine.h"
+#include "domain\headers\ServoWheel.h"
+#include "domain\headers\LedBasedEngine.h"

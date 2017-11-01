@@ -17,7 +17,7 @@ void setup()
 {
     logger = new Logger();
 
-    LedBasedWheel *concreteWheel = new LedBasedWheel(logger);
+    ServoWheel *concreteWheel = new ServoWheel(logger);
     LedBasedEngine *concreteEngine = new LedBasedEngine(logger);
 
     wheel = concreteWheel;

@@ -2,13 +2,14 @@
 
 #include "../../Includes.h"
 
-class LedBasedWheel : public AbstractWheel
+class ServoWheel : public AbstractWheel
 {
   private:
+    Servo _servo;
     Logger *_logger;
 
   public:
-    LedBasedWheel(Logger *logger);
+    ServoWheel(Logger *logger);
     bool setup();
     virtual void setRotation(float value);
 };

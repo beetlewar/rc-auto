@@ -37,6 +37,11 @@
 /car/http-server/lib/
 /car/http-server/.gitignore
 
+/car/realtime/.pioenvs/
+/car/realtime/.vscode/
+/car/realtime/lib/
+/car/realtime/.gitignore
+
 # node.js
 /http-client/node_modules/
 /http-client/bin/

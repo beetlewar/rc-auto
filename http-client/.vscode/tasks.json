@@ -4,7 +4,7 @@
         {
             "taskName": "client_build",
             "type": "shell",
-            "command": "npm run build --prefix ./http-client",
+            "command": "npm run build",
             "args": [],
             "group": {
                 "kind": "build",
@@ -15,7 +15,7 @@
         {
             "taskName": "server_run",
             "type": "shell",
-            "command": "npm start --prefix ./http-client",
+            "command": "npm start",
             "args": [],
             "problemMatcher": []
         }

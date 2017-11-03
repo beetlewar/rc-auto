@@ -32,9 +32,10 @@
 *.app
 
 # arduino
-Log.ino
-/http-server/bin/
-/data/
+/car/http-server/.pioenvs/
+/car/http-server/.vscode/
+/car/http-server/lib/
+/car/http-server/.gitignore
 
 # node.js
 /http-client/node_modules/
@@ -42,6 +43,3 @@ Log.ino
 /http-client/package-lock.json
 
 *.log
-.pioenvs
-.piolibdeps
-.vscode/c_cpp_properties.json

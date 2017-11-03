@@ -18,28 +18,6 @@
             "command": "npm start --prefix ./http-client",
             "args": [],
             "problemMatcher": []
-        },
-        {
-            "taskName": "spiffs_upload",
-            "type": "PlatformIO",
-            "args": [
-                "run",
-                "--target",
-                "uploadfs"
-            ],
-            "problemMatcher": [
-                "$platformio"
-            ]
-        },
-        {
-            "taskName": "server_test",
-            "type": "PlatformIO",
-            "args": [
-                "test"
-            ],
-            "problemMatcher": [
-                "$platformio"
-            ]
         }
     ]
 }

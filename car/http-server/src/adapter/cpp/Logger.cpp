@@ -3,6 +3,11 @@
 bool Logger::setup(int serialSpeed)
 {
     Serial.begin(serialSpeed);
+
+    println("");
+    println("------STARTING NEW APPLICATION-------");
+
+    return true;
 }
 
 void Logger::print(String s)

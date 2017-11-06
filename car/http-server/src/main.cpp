@@ -16,7 +16,7 @@ void setup()
 
     fileSystem = new FileSystem(logger);
     i2cMaster = new I2CMaster(logger);
-    accessPoint = new WiFiAccessPoint(logger);
+        accessPoint = new WiFiAccessPoint(logger);
     rcHost = new WiFiRcHost(logger, fileSystem, i2cMaster);
 
     initialized =

@@ -1,13 +1,16 @@
-#include "..\..\Includes.h"
+#include "Includes.h"
 
 const byte DNS_PORT = 53;
 const String DNS = "www.rchost.ru";
 
-WiFiRcHost::WiFiRcHost(Logger *logger, FileSystem *fileSystem, I2CMaster *i2cMaster)
+WiFiRcHost::WiFiRcHost(
+    Logger *logger,
+    FileSystem *fileSystem,
+    SerialTransmitter *serialTransmitter)
 {
     _logger = logger;
     _fileSystem = fileSystem;
-    _i2cMaster = i2cMaster;
+    _serialTransmitter = serialTransmitter;
 }
 
 void WiFiRcHost::loop()
@@ -81,7 +84,7 @@ void WiFiRcHost::handleGas()
     _logger->print("gas: ");
     _logger->println(gas);
 
-    _i2cMaster->publishGas(gas);
+    _serialTransmitter->transmitGas(gas);
 
     _server.send(200);
 }
@@ -95,7 +98,7 @@ void WiFiRcHost::handleWheel()
     _logger->print("wheel: ");
     _logger->println(wheel);
 
-    _i2cMaster->publishWheelRotation(wheel);
+    _serialTransmitter->transmitWheel(wheel);
 
     _server.send(200);
 }

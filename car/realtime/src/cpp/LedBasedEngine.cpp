@@ -1,6 +1,6 @@
-#include "..\..\Includes.h"
+#include "Includes.h"
 
-const int gasPin = D11;
+const int gasPin = D7;
 
 LedBasedEngine::LedBasedEngine(Logger *logger)
 {
@@ -10,6 +10,9 @@ LedBasedEngine::LedBasedEngine(Logger *logger)
 bool LedBasedEngine::setup()
 {
     pinMode(gasPin, OUTPUT);
+
+    _logger->print("Started led gas at pin ");
+    _logger->println(gasPin);
 
     return true;
 }

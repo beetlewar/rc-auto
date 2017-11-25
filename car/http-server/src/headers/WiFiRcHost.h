@@ -1,19 +1,18 @@
 #pragma once
 
-#include "..\..\Includes.h"
+#include "Includes.h"
 
 class WiFiRcHost
 {
 private:
   ESP8266WebServer _server;
   DNSServer _dnsServer;
-
   Logger *_logger;
   FileSystem *_fileSystem;
-  I2CMaster *_i2cMaster;
+  SerialTransmitter *_serialTransmitter;
 
 public:
-  WiFiRcHost(Logger *logger, FileSystem *fileSystem, I2CMaster *i2cMaster);
+  WiFiRcHost(Logger *logger, FileSystem *fileSystem, SerialTransmitter *serialTransmitter);
 
   bool setup();
 

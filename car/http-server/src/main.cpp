@@ -8,23 +8,23 @@ Logger *logger = NULL;
 FileSystem *fileSystem = NULL;
 WiFiAccessPoint *accessPoint = NULL;
 WiFiRcHost *rcHost = NULL;
-I2CMaster *i2cMaster = NULL;
+SerialTransmitter *transmitter;
 
 void setup()
 {
     logger = new Logger();
 
     fileSystem = new FileSystem(logger);
-    i2cMaster = new I2CMaster(logger);
-        accessPoint = new WiFiAccessPoint(logger);
-    rcHost = new WiFiRcHost(logger, fileSystem, i2cMaster);
+    accessPoint = new WiFiAccessPoint(logger);
+    transmitter = new SerialTransmitter(logger);
+    rcHost = new WiFiRcHost(logger, fileSystem, transmitter);
 
     initialized =
         logger->setup(9600) &&
         fileSystem->setup() &&
         accessPoint->setup("rc-auto", "123qwerty") &&
-        rcHost->setup() &&
-        i2cMaster->setup();
+        transmitter->setup() &&
+        rcHost->setup();
 
     if (initialized)
     {
@@ -42,6 +42,8 @@ void loop()
     {
         return;
     }
+
+    delay(10);
 
     rcHost->loop();
 }

@@ -1,6 +1,6 @@
-#include "..\..\Includes.h"
+#include "Includes.h"
 
-const int wheelPin = D9;
+const int wheelPin = D8;
 const float MAX_WHEEL_ANGLE = 45;
 const float WHEEL_CENTER_ANGLE = 90;
 
@@ -13,6 +13,10 @@ bool ServoWheel::setup()
 {
     _servo.attach(wheelPin);
     _servo.write(WHEEL_CENTER_ANGLE);
+
+    _logger->print("Started wheel servo at pin ");
+    _logger->println(wheelPin);
+
     return true;
 }
 

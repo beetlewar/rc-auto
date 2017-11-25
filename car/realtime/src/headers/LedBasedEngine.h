@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../Includes.h"
+#include "Includes.h"
 
-class LedBasedEngine : public AbstractEngine
+class LedBasedEngine
 {
   private:
     Logger *_logger;
@@ -10,5 +10,5 @@ class LedBasedEngine : public AbstractEngine
   public:
     LedBasedEngine(Logger *logger);
     bool setup();
-    virtual void setGas(float value);
+    void setGas(float value);
 };

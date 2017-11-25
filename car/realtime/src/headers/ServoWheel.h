@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../Includes.h"
+#include "Includes.h"
 
-class ServoWheel : public AbstractWheel
+class ServoWheel
 {
   private:
     Servo _servo;
@@ -11,5 +11,5 @@ class ServoWheel : public AbstractWheel
   public:
     ServoWheel(Logger *logger);
     bool setup();
-    virtual void setRotation(float value);
+    void setRotation(float value);
 };

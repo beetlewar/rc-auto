@@ -4,34 +4,30 @@ Car::Car(Logger *logger)
 {
     _logger = logger;
 
-    _wheel = new ServoWheel(_logger);
-    _engine = new LedBasedEngine(_logger);
+    _pwmHost = new PwmHost();
+
+    Pwm *pwm = _pwmHost->addPwm(D1);
+
+    _wheel = new ServoWheel(_logger, pwm);
 }
 
 Car::~Car()
 {
     delete _wheel;
-    delete _engine;
+    delete _pwmHost;
 }
 
 bool Car::setup()
 {
-    if (!_wheel->setup())
-    {
-        return false;
-    }
+    _logger->println("Starting servo wheel at pin D1");
 
-    if (!_engine->setup())
-    {
-        return false;
-    }
+    _pwmHost->start(20);
 
     return true;
 }
 
 void Car::setGas(float gas)
 {
-    _engine->setGas(gas);
 }
 
 void Car::setWheel(float wheel)

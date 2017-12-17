@@ -25,7 +25,7 @@ void loop()
         return;
     }
 
-    delay(10);
-
     receiver->loop();
+
+    delay(1);
 }

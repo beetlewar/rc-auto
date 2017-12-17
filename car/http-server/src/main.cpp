@@ -43,9 +43,9 @@ void loop()
         return;
     }
 
-    delay(10);
-
     rcHost->loop();
+
+    delay(20);
 }
 
 #endif

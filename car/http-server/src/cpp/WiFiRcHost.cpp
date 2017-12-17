@@ -15,17 +15,17 @@ WiFiRcHost::WiFiRcHost(
 
 void WiFiRcHost::loop()
 {
-    _dnsServer.processNextRequest();
+    //_dnsServer.processNextRequest();
     _server.handleClient();
 }
 
 bool WiFiRcHost::setup()
 {
-    _dnsServer.setErrorReplyCode(DNSReplyCode::ServerFailure);
-    _dnsServer.start(DNS_PORT, DNS, IPAddress(192, 168, 4, 1));
+    // _dnsServer.setErrorReplyCode(DNSReplyCode::ServerFailure);
+    // _dnsServer.start(DNS_PORT, DNS, IPAddress(192, 168, 4, 1));
 
-    _logger->print("DNS: ");
-    _logger->println(DNS);
+    // _logger->print("DNS: ");
+    // _logger->println(DNS);
 
     _server.begin();
 

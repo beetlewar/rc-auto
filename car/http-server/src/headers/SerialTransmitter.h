@@ -4,11 +4,13 @@
 
 class SerialTransmitter
 {
-private:
+  private:
     Logger *_logger;
     SoftwareSerial *_serial;
+    float _gas;
+    float _wheel;
 
-public:
+  public:
     SerialTransmitter(Logger *logger);
 
     ~SerialTransmitter();
@@ -18,4 +20,7 @@ public:
     void transmitGas(float value);
 
     void transmitWheel(float value);
+
+  private:
+    void transmitItem(uint8_t type, float value);
 };

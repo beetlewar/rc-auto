@@ -5,11 +5,10 @@
 class ServoWheel
 {
   private:
-    Servo _servo;
     Logger *_logger;
+    Pwm *_pwm;
 
   public:
-    ServoWheel(Logger *logger);
-    bool setup();
+    ServoWheel(Logger *logger, Pwm *pwm);
     void setRotation(float value);
 };

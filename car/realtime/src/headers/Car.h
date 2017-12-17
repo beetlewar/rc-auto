@@ -7,7 +7,7 @@ class Car
 private:
   Logger *_logger;
   ServoWheel *_wheel;
-  LedBasedEngine *_engine;
+  PwmHost *_pwmHost;
 
 public:
   Car(Logger *logger);

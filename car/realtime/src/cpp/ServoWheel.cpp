@@ -1,34 +1,24 @@
 #include "Includes.h"
 
-const int wheelPin = D8;
-const float MAX_WHEEL_ANGLE = 45;
-const float WHEEL_CENTER_ANGLE = 90;
+const float MAX_ROTATION_MSEC = 600;
+const float CENTER_ROTATION_MSEC = 1500;
 
-ServoWheel::ServoWheel(Logger *logger)
+ServoWheel::ServoWheel(Logger *logger, Pwm *pwm)
 {
     _logger = logger;
-}
-
-bool ServoWheel::setup()
-{
-    _servo.attach(wheelPin);
-    _servo.write(WHEEL_CENTER_ANGLE);
-
-    _logger->print("Started wheel servo at pin ");
-    _logger->println(wheelPin);
-
-    return true;
+    _pwm = pwm;
 }
 
 void ServoWheel::setRotation(float value)
 {
-    // 0 градусов - поворот вправо на 90 градусов
-    // 90 градусов - середина (нет поворота)
-    // 180 градусов - поворот влево на 90 градусов
-    float angle = WHEEL_CENTER_ANGLE - (value * MAX_WHEEL_ANGLE);
+    int rotation = CENTER_ROTATION_MSEC + (value * MAX_ROTATION_MSEC);
 
-    _logger->print("Setting servo wheel angle at ");
-    _logger->println(angle);
+    // округляем до определенной точности.
+    //rotation = rotation / 20 * 20;
 
-    _servo.write(angle);
+    _logger->print("Setting servo wheel rotation at ");
+    _logger->print(rotation);
+    _logger->println(" msec");
+
+    _pwm->setWidth(rotation);
 }

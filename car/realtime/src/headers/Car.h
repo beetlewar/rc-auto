@@ -6,6 +6,7 @@ class Car
 {
 private:
   Logger *_logger;
+  Engine *_engine;
   ServoWheel *_wheel;
   PwmHost *_pwmHost;
 

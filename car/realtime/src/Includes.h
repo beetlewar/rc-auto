@@ -15,6 +15,7 @@ extern "C" {
 #include "headers\Pwm.h"
 #include "headers\PwmComparer.h"
 #include "headers\PwmHost.h"
+#include "headers\Engine.h"
 #include "headers\ServoWheel.h"
 #include "headers\Car.h"
 #include "headers\SerialReceiver.h"

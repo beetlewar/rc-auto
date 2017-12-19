@@ -18,24 +18,59 @@ module.exports = class Gas {
         this.updateGasTable();
     }
 
+    isRowVisible(table, index) {
+        var middle = table.rows.length / 2;
+
+        var numVisibleCells = middle * Math.abs(this.gasValue);
+
+        if (this.gasValue < 0) {
+            if (index < middle) {
+                return false;
+            }
+            else {
+                var negativeIndex = index - middle;
+                return negativeIndex < numVisibleCells;
+            }
+        }
+        else {
+            if (index >= middle) {
+                return false;
+            }
+            else {
+                var positiveIndex = middle - index - 1;
+                return positiveIndex < numVisibleCells;
+            }
+        }
+
+        return index % 2 == 0;
+    }
+
     updateGasTable() {
         var table = document.getElementById("gasTable");
 
         table.style.visibility = this.gasPressed ? "visible" : "hidden";
 
-        var numVisibleCells = table.rows.length * this.gasValue;
-
         for (var i = 0; i < table.rows.length; i++) {
-            var rowIndex = table.rows.length - i - 1;
-
-            var cell = table.rows[rowIndex].cells[0];
-            if (i < numVisibleCells) {
+            var cell = table.rows[i].cells[0];
+            if (this.isRowVisible(table, i)) {
                 cell.classList.remove("transparent-cell");
             }
             else {
                 cell.classList.add("transparent-cell");
             }
         }
+
+        // for (var i = 0; i < table.rows.length; i++) {
+        //     var rowIndex = table.rows.length - i - 1;
+
+        //     var cell = table.rows[rowIndex].cells[0];
+        //     if (i < numVisibleCells) {
+        //         cell.classList.remove("transparent-cell");
+        //     }
+        //     else {
+        //         cell.classList.add("transparent-cell");
+        //     }
+        // }
     }
 
     ondragstart(e) {
@@ -87,7 +122,7 @@ module.exports = class Gas {
 
         var dGas = dY / FULL_GAS_TOUCH_MOVE;
 
-        this.gasValue = Math.max(0, Math.min(1.0, this.gasValue + dGas));
+        this.gasValue = Math.max(-1, Math.min(1.0, this.gasValue + dGas));
 
         this.updateGasTable();
 

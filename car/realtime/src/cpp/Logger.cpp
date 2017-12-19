@@ -9,7 +9,7 @@ bool Logger::setup(int serialSpeed)
     Serial.begin(serialSpeed);
 
     println("");
-    println("------STARTING NEW APPLICATION-------");
+    println("------STARTING NEW CAR APPLICATION-------");
 
 #endif
 

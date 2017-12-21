@@ -8,6 +8,11 @@ typedef union {
     uint8_t binary[4];
 } binaryFloat;
 
+typedef union {
+    uint16_t shortValue;
+    uint8_t binary[2];
+} binaryShort;
+
 enum transmittionItemType
 {
     WHEEL,
@@ -66,18 +71,61 @@ void SerialTransmitter::transmitWheel(float value)
 
 void SerialTransmitter::transmitItem(uint8_t type, float value)
 {
-    int sent = _serial->write(type);
+    transmitHeader();
+
+    transmitBodySize(sizeof(uint8_t) + sizeof(float));
+
+    transmitBody(type, value);
+
+    transmitTail();
+}
+
+void SerialTransmitter::transmitHeader()
+{
+    const String header = "Hello";
+
+    for (int i = 0; i < header.length(); i++)
+    {
+        _serial->write(header[i]);
+    }
+
+    _logger->println("Hello sent");
+}
+
+void SerialTransmitter::transmitBodySize(uint16_t size)
+{
+    binaryShort bs;
+    bs.shortValue = size;
+
+    _serial->write(bs.binary[0]);
+    _serial->write(bs.binary[1]);
+
+    _logger->println("Size sent");
+}
+
+void SerialTransmitter::transmitBody(uint8_t type, float value)
+{
+    _serial->write(type);
 
     binaryFloat bf;
     bf.floatingPoint = value;
 
-    sent &= _serial->write(bf.binary[0]);
-    sent &= _serial->write(bf.binary[1]);
-    sent &= _serial->write(bf.binary[2]);
-    sent &= _serial->write(bf.binary[3]);
+    _serial->write(bf.binary[0]);
+    _serial->write(bf.binary[1]);
+    _serial->write(bf.binary[2]);
+    _serial->write(bf.binary[3]);
 
-    _logger->print("Transmittion result for ");
-    _logger->print(type);
-    _logger->print(": ");
-    _logger->println(sent);
+    _logger->println("value sent");
+}
+
+void SerialTransmitter::transmitTail()
+{
+    const String tail = "World";
+
+    for (int i = 0; i < tail.length(); i++)
+    {
+        _serial->write(tail[i]);
+    }
+
+    _logger->println("World sent");
 }

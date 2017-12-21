@@ -12,6 +12,7 @@ extern "C" {
 }
 
 #include "headers\Logger.h"
+#include "headers\typedefs.h"
 #include "headers\Pwm.h"
 #include "headers\PwmComparer.h"
 #include "headers\PwmHost.h"

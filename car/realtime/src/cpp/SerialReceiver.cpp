@@ -2,11 +2,6 @@
 
 const int SERIAL_RX = D6;
 
-typedef union {
-    float floatingPoint;
-    uint8_t binary[4];
-} binaryFloat;
-
 enum transmittionItemType
 {
     WHEEL,
@@ -15,15 +10,20 @@ enum transmittionItemType
 
 SerialReceiver::SerialReceiver(Logger *logger, Car *car)
 {
+    uint16_t bufSize = sizeof(uint8_t) + sizeof(float);
+
     _logger = logger;
     _car = car;
     _serial = new SoftwareSerial(SERIAL_RX, SW_SERIAL_UNUSED_PIN);
+    _serializer = new SerialPortSerializer(bufSize);
+    _serializerData = new SerialPortData(bufSize);
 }
 
 SerialReceiver::~SerialReceiver()
 {
+    delete _serializerData;
+    delete _serializer;
     delete _serial;
-    _serial = NULL;
 }
 
 bool SerialReceiver::setup()
@@ -38,47 +38,38 @@ bool SerialReceiver::setup()
 
 void SerialReceiver::loop()
 {
-    const float invalidWheel = -100;
-    const float invalidGas = -100;
-
-    float wheel = invalidWheel;
-    float gas = invalidGas;
-
-    if (_serial->available() >= 5)
+    while (_serial->available())
     {
-        int itemType = _serial->read();
+        uint8_t byte = (uint8_t)_serial->read();
 
-        binaryFloat value;
+        _serializer->addByte(byte);
 
-        for (int i = 0; i < 4; i++)
+        if (_serializer->ready())
         {
-            delay(0);
-            value.binary[i] = _serial->read();
-        }
+            _serializer->getData(_serializerData);
 
-        _logger->print("Received ");
-        _logger->print(itemType == GAS ? "GAS" : "WHEEL");
-        _logger->print(": ");
-        _logger->println(value.floatingPoint);
-
-        switch (itemType)
-        {
-        case GAS:
-            gas = value.floatingPoint;
-            break;
-        case WHEEL:
-            wheel = value.floatingPoint;
-            break;
+            handleMessage(_serializerData->data());
         }
     }
+}
 
-    if (gas != invalidGas)
-    {
-        _car->setGas(gas);
-    }
+void SerialReceiver::handleMessage(const uint8_t *data)
+{
+    uint8_t messageType = data[0];
 
-    if (wheel != invalidWheel)
+    binaryFloat bf;
+    bf.binary[0] = data[1];
+    bf.binary[1] = data[2];
+    bf.binary[2] = data[3];
+    bf.binary[3] = data[4];
+
+    switch (messageType)
     {
-        _car->setWheel(wheel);
+    case WHEEL:
+        _car->setWheel(bf.floatingPoint);
+        break;
+    case GAS:
+        _car->setGas(bf.floatingPoint);
+        break;
     }
 }

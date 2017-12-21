@@ -6,11 +6,12 @@ class SerialPortSerializer
 {
   private:
     uint8_t *_header;
-    uint8_t *_bodySize;
+    binaryShort _bodySize;
     uint8_t *_body;
-    uint16_t _bufSize;
-    uint16_t _messageSize;
     uint8_t *_tail;
+
+    uint16_t _bufSize;
+
     uint8_t _state;
     int _position;
 

@@ -4,17 +4,22 @@
 
 class SerialReceiver
 {
-  private:
-    Logger *_logger;
-    Car *_car;
-    SoftwareSerial *_serial;
+private:
+  Logger *_logger;
+  Car *_car;
+  SoftwareSerial *_serial;
+  SerialPortData *_serializerData;
+  SerialPortSerializer *_serializer;
 
-  public:
-    SerialReceiver(Logger *logger, Car *car);
+private:
+  void handleMessage(const uint8_t *data);
 
-    ~SerialReceiver();
+public:
+  SerialReceiver(Logger *logger, Car *car);
 
-    bool setup();
+  ~SerialReceiver();
 
-    void loop();
+  bool setup();
+
+  void loop();
 };

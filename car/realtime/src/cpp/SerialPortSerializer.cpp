@@ -15,7 +15,6 @@ const String TAIL_VALUE = "World";
 SerialPortSerializer::SerialPortSerializer(uint16_t bufSize)
 {
     _header = new uint8_t[HEADER_VALUE.length()];
-    _bodySize = new uint8_t[sizeof(uint16_t)];
     _body = new uint8_t[bufSize];
     _bufSize = bufSize;
     _tail = new uint8_t[TAIL_VALUE.length()];
@@ -26,6 +25,9 @@ SerialPortSerializer::SerialPortSerializer(uint16_t bufSize)
 
 SerialPortSerializer::~SerialPortSerializer()
 {
+    delete[] _header;
+    delete[] _body;
+    delete[] _tail;
 }
 
 void SerialPortSerializer::addByte(uint8_t byte)
@@ -66,8 +68,7 @@ bool SerialPortSerializer::getData(SerialPortData *destination)
         return false;
     }
 
-    destination->size = _messageSize;
-    memcpy(destination->data, _body, _messageSize);
+    destination->copyData(_body, _bodySize.shortValue);
 
     return true;
 }
@@ -106,13 +107,11 @@ bool SerialPortSerializer::isHeaderReceived()
 void SerialPortSerializer::processBodySize(uint8_t byte)
 {
     _position++;
-    _bodySize[_position] = byte;
+    _bodySize.binary[_position] = byte;
 
     if (isBodySizeReceived())
     {
-        _messageSize = *(uint16_t *)(_bodySize);
-
-        if (_messageSize > _bufSize)
+        if (_bodySize.shortValue <= 0 || _bodySize.shortValue > _bufSize)
         {
             moveToHeader();
         }
@@ -131,7 +130,7 @@ void SerialPortSerializer::moveToBodySize()
 
 bool SerialPortSerializer::isBodySizeReceived()
 {
-    return _position == sizeof(uint16_t) - 1;
+    return _position == sizeof(binaryShort) - 1;
 }
 
 void SerialPortSerializer::processBody(uint8_t byte)
@@ -153,7 +152,7 @@ void SerialPortSerializer::moveToBody()
 
 bool SerialPortSerializer::isBodyReceived()
 {
-    return _position == _messageSize - 1;
+    return _position == _bodySize.shortValue - 1;
 }
 
 void SerialPortSerializer::processTail(uint8_t byte)

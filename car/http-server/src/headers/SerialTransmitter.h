@@ -7,8 +7,6 @@ class SerialTransmitter
 private:
   Logger *_logger;
   SoftwareSerial *_serial;
-  float _gas;
-  float _wheel;
 
 public:
   SerialTransmitter(Logger *logger);

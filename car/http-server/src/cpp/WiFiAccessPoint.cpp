@@ -7,7 +7,7 @@ WiFiAccessPoint::WiFiAccessPoint(Logger *logger)
 
 bool WiFiAccessPoint::setup(const char *ssid, const char *password)
 {
-    bool b = WiFi.softAP(ssid, password);
+    bool b = WiFi.softAP(ssid, password, 10);
 
     if (b)
     {

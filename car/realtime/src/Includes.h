@@ -19,6 +19,7 @@ extern "C" {
 #include "headers\Engine.h"
 #include "headers\ServoWheel.h"
 #include "headers\Car.h"
+#include "headers\HealthMonitor.h"
 #include "headers\SerialPortData.h"
 #include "headers\SerialPortSerializer.h"
 #include "headers\SerialReceiver.h"

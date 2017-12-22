@@ -10,7 +10,7 @@ class Pwm
     unsigned int _highTime;
 
   public:
-    Pwm(int pin);
+    Pwm(int pin, unsigned int width);
 
     int getWidth();
 

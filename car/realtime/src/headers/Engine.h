@@ -9,6 +9,6 @@ class Engine
     Pwm *_pwm;
 
   public:
-    Engine(Logger *logger, Pwm *pwm);
+    Engine(Logger *logger, PwmHost *pwmHost);
     void setGas(float value);
 };

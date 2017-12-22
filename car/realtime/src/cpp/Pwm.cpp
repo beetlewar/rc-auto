@@ -1,9 +1,9 @@
 #include "Includes.h"
 
-Pwm::Pwm(int pin)
+Pwm::Pwm(int pin, unsigned int width)
 {
     _pin = pin;
-    _width = 0;
+    _width = width;
 
     pinMode(pin, OUTPUT);
 }

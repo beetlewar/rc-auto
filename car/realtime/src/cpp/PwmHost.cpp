@@ -10,16 +10,16 @@ PwmHost::~PwmHost()
     _pwms.clear();
 }
 
-Pwm *PwmHost::addPwm(int pin)
+Pwm *PwmHost::addPwm(int pin, unsigned int width)
 {
-    Pwm *pwm = new Pwm(pin);
+    Pwm *pwm = new Pwm(pin, width);
 
     _pwms.push_back(pwm);
 
     return pwm;
 }
 
-void tick(void *pArg)
+void pwmHostTick(void *pArg)
 {
     PwmHost *pwm = (PwmHost *)pArg;
     pwm->loop();
@@ -27,8 +27,8 @@ void tick(void *pArg)
 
 void PwmHost::start(int periodMSec)
 {
-    os_timer_setfn(&myTimer, tick, this);
-    os_timer_arm(&myTimer, periodMSec, true);
+    os_timer_setfn(&_pwmTimer, pwmHostTick, this);
+    os_timer_arm(&_pwmTimer, periodMSec, true);
 }
 
 void PwmHost::loop()

@@ -1,21 +1,14 @@
 #include "Includes.h"
 
-const int WHEEL_PIN = D1;
-const int ENGINE_PIN = D3;
-
 Car::Car(Logger *logger)
 {
     _logger = logger;
 
     _pwmHost = new PwmHost();
 
-    Pwm *wheelPwm = _pwmHost->addPwm(WHEEL_PIN);
+    _wheel = new ServoWheel(_logger, _pwmHost);
 
-    Pwm *enginePwm = _pwmHost->addPwm(ENGINE_PIN);
-
-    _wheel = new ServoWheel(_logger, wheelPwm);
-
-    _engine = new Engine(_logger, enginePwm);
+    _engine = new Engine(_logger, _pwmHost);
 }
 
 Car::~Car()
@@ -32,6 +25,10 @@ bool Car::setup()
     _logger->println("Starting engine at pin D3");
 
     _pwmHost->start(20);
+
+    _engine->setGas(0);
+
+    _wheel->setRotation(0);
 
     return true;
 }

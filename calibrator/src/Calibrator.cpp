@@ -4,7 +4,7 @@ const int SERVO_PIN = D1;
 
 void Calibrator::setup()
 {
-    _servo.attach(D1);
+    _servo.attach(SERVO_PIN);
 }
 
 void Calibrator::setWidthMuSec(int value)

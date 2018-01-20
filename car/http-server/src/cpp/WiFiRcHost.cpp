@@ -36,6 +36,7 @@ bool WiFiRcHost::setup()
     _server.on("/app.js", HTTP_GET, std::bind(&WiFiRcHost::handleAppScript, this));
     _server.on("/api/gas", HTTP_PUT, std::bind(&WiFiRcHost::handleGas, this));
     _server.on("/api/wheel", HTTP_PUT, std::bind(&WiFiRcHost::handleWheel, this));
+    _server.on("/api/keepAlive", HTTP_PUT, std::bind(&WiFiRcHost::handleKeepAlive, this));
 
     _logger->println("Http server started at port 80.");
 
@@ -99,6 +100,15 @@ void WiFiRcHost::handleWheel()
     _logger->println(wheel);
 
     _serialTransmitter->transmitWheel(wheel);
+
+    _server.send(200);
+}
+
+void WiFiRcHost::handleKeepAlive()
+{
+    _logger->println("Handling API KeepAlive.");
+
+    _serialTransmitter->transmitKeepAlive();
 
     _server.send(200);
 }

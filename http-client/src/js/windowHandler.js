@@ -2,7 +2,8 @@ module.exports = class WindowHandler {
     init() {
         document.body.style.webkitTouchCallout = 'none';
 
-        document.addEventListener("touchmove", () => {
+        document.addEventListener("touchmove", e => {
+            e.preventDefault();
             return false;
         });
 

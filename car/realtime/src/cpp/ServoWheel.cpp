@@ -1,7 +1,7 @@
 #include "Includes.h"
 
 const int WHEEL_PIN = D1;
-const float MAX_ROTATION_MSEC = 600;
+const float MAX_ROTATION_MSEC = 450;
 const float CENTER_ROTATION_MSEC = 1500;
 
 ServoWheel::ServoWheel(Logger *logger, PwmHost *pwmHost)
@@ -17,7 +17,7 @@ void ServoWheel::setRotation(float value)
         return;
     }
 
-    int rotation = CENTER_ROTATION_MSEC + (value * MAX_ROTATION_MSEC);
+    int rotation = CENTER_ROTATION_MSEC - (value * MAX_ROTATION_MSEC);
 
     _logger->print("Setting servo wheel rotation at ");
     _logger->print(rotation);

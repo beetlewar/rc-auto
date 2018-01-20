@@ -11,8 +11,8 @@ void setup()
 {
     logger = new Logger();
     car = new Car(logger);
-    receiver = new SerialReceiver(logger, car);
     hm = new HealthMonitor(logger, car);
+    receiver = new SerialReceiver(logger, car, hm);
 
     initialized =
         logger->setup(9600) &&

@@ -1,4 +1,4 @@
-const FULL_GAS_TOUCH_MOVE = 150;
+const FULL_GAS_TOUCH_MOVE = 100;
 
 module.exports = class Gas {
     init() {
@@ -59,18 +59,6 @@ module.exports = class Gas {
                 cell.classList.add("transparent-cell");
             }
         }
-
-        // for (var i = 0; i < table.rows.length; i++) {
-        //     var rowIndex = table.rows.length - i - 1;
-
-        //     var cell = table.rows[rowIndex].cells[0];
-        //     if (i < numVisibleCells) {
-        //         cell.classList.remove("transparent-cell");
-        //     }
-        //     else {
-        //         cell.classList.add("transparent-cell");
-        //     }
-        // }
     }
 
     ondragstart(e) {

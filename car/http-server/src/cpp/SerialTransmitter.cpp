@@ -1,6 +1,7 @@
 #include "Includes.h"
 
 const int SERIAL_TX = D6;
+const float FLOAT_ACC = 0.01;
 
 typedef union {
     float floatingPoint;
@@ -15,7 +16,8 @@ typedef union {
 enum transmittionItemType
 {
     WHEEL,
-    GAS
+    GAS,
+    KEEP_ALIVE
 };
 
 SerialTransmitter::SerialTransmitter(Logger *logger)
@@ -23,6 +25,8 @@ SerialTransmitter::SerialTransmitter(Logger *logger)
     _logger = logger;
     _serial = new SoftwareSerial(SW_SERIAL_UNUSED_PIN, SERIAL_TX);
     _serial->begin(115200);
+    _carGas = 0;
+    _carWheel = 0;
 }
 
 SerialTransmitter::~SerialTransmitter()
@@ -41,21 +45,58 @@ bool SerialTransmitter::setup()
 
 void SerialTransmitter::transmitGas(float value)
 {
-    transmitItem(GAS, value);
+    if (abs(value > 1))
+    {
+        return;
+    }
+
+    float delta = abs(_carGas - value);
+    if (delta < FLOAT_ACC)
+    {
+        return;
+    }
+
+    binaryFloat bf;
+    bf.floatingPoint = value;
+
+    transmitItem(GAS, bf.binary, sizeof(float));
+
+    _carGas = value;
 }
 
 void SerialTransmitter::transmitWheel(float value)
 {
-    transmitItem(WHEEL, value);
+    if (abs(value > 1))
+    {
+        return;
+    }
+
+    float delta = abs(_carWheel - value);
+    if (delta < FLOAT_ACC)
+    {
+        return;
+    }
+
+    binaryFloat bf;
+    bf.floatingPoint = value;
+
+    transmitItem(WHEEL, bf.binary, sizeof(float));
+
+    _carWheel = value;
 }
 
-void SerialTransmitter::transmitItem(uint8_t type, float value)
+void SerialTransmitter::transmitKeepAlive()
+{
+    transmitItem(KEEP_ALIVE, NULL, 0);
+}
+
+void SerialTransmitter::transmitItem(uint8_t type, uint8_t *bytes, int size)
 {
     transmitHeader();
 
-    transmitBodySize(sizeof(uint8_t) + sizeof(float));
+    transmitBodySize(sizeof(uint8_t) + size);
 
-    transmitBody(type, value);
+    transmitBody(type, bytes, size);
 
     transmitTail();
 }
@@ -79,17 +120,14 @@ void SerialTransmitter::transmitBodySize(uint16_t size)
     _serial->write(bs.binary[1]);
 }
 
-void SerialTransmitter::transmitBody(uint8_t type, float value)
+void SerialTransmitter::transmitBody(uint8_t type, uint8_t *bytes, int size)
 {
     _serial->write(type);
 
-    binaryFloat bf;
-    bf.floatingPoint = value;
-
-    _serial->write(bf.binary[0]);
-    _serial->write(bf.binary[1]);
-    _serial->write(bf.binary[2]);
-    _serial->write(bf.binary[3]);
+    for (int i = 0; i < size; i++)
+    {
+        _serial->write(bytes[i]);
+    }
 }
 
 void SerialTransmitter::transmitTail()

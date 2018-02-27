@@ -1,18 +1,18 @@
+const ApiClient = require("./apiClient");
+
 // максимальный угол поворота руля
 const MAX_ROTATION_ANGLE = 90;
 // скорость возврата руля в нейтральное положение, градусов в секунду
 const RETURN_ROTATION_TO_ZERO_SPEED = 180;
 
 module.exports = class Wheel {
-    init() {
+    init(apiClient) {
+        this.apiClient = apiClient;
         this.pressed = false;
         this.dragAngle = 0;
         this.wheelRotationAngle = 0;
-        this.puttingRotation = false;
-        this.wheelRotationOnServer = 0;
 
         this.wheelDocument = document.getElementById("wheel");
-
         this.wheelDocument.ondragstart = e => this.ondragstart(e);
         this.wheelDocument.ontouchstart = e => this.ontouchstart(e);
         this.wheelDocument.ontouchmove = e => this.ontouchmove(e);
@@ -45,7 +45,8 @@ module.exports = class Wheel {
                 return touches[i];
             }
         }
-        return null;
+
+        return undefined;
     }
 
     getWheelAngle(screenX, screenY) {
@@ -113,41 +114,11 @@ module.exports = class Wheel {
         this.wheelRotationAngle = Math.min(MAX_ROTATION_ANGLE, Math.max(-MAX_ROTATION_ANGLE, this.wheelRotationAngle + angle));
         this.wheelDocument.style.transform = "rotate(" + this.wheelRotationAngle + "deg)";
 
-        this.putWheel();
-    }
+        var wheelValue = this.wheelRotationAngle / MAX_ROTATION_ANGLE;
 
-    putWheel() {
-        if (this.puttingRotation) {
-            console.log("putting rot");
-            return;
-        }
-        if (this.wheelRotationOnServer == this.wheelRotationAngle) {
-            console.log("same rot");
-            return;
-        }
+        wheelValue = Math.round(wheelValue * 100) / 100;
 
-        this.puttingRotation = true;
-
-        var pendingWheelRotation = this.wheelRotationAngle;
-        var wheelContent = "wheel=" + this.wheelRotationAngle / MAX_ROTATION_ANGLE;
-        console.info("putting wheel: " + wheelContent);
-
-        var request = new XMLHttpRequest();
-        request.onreadystatechange = () => {
-            if (request.readyState == XMLHttpRequest.DONE) {
-                this.wheelRotationOnServer = pendingWheelRotation;
-
-                this.puttingRotation = false;
-
-                if (this.wheelRotationAngle != this.wheelRotationOnServer) {
-                    this.putWheel();
-                }
-            }
-        }
-
-        request.open("PUT", "/api/wheel", true);
-        request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        request.send(wheelContent);
+        this.apiClient.sendWheel(wheelValue);
     }
 
     ontouchend() {

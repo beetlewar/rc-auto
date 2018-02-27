@@ -1,28 +1,11 @@
+const ApiClient = require("./apiClient");
+
 module.exports = class KeepAlive {
-    init() {
-        this.puttingKeepAlive = false;
+    init(apiClient) {
+        this.apiClient = apiClient;
 
-        setInterval(() => {
-            if (this.puttingKeepAlive) {
-                console.log("still putting keepAlive...");
-                return;
-            }
-
-            this.puttingKeepAlive = true;
-
-            var request = new XMLHttpRequest();
-            request.onreadystatechange = () => {
-                if (request.readyState == XMLHttpRequest.DONE) {
-                    this.puttingKeepAlive = false;
-                }
-            }
-
-            request.open("PUT", "/api/keepAlive", true);
-            request.send();
-        }, 333);
-    }
-
-    sendKeepAlive(){
-        
+        setInterval(
+            () => this.apiClient.sendKeepAlive(),
+            333);
     }
 }

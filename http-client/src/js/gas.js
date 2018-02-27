@@ -1,12 +1,11 @@
 const FULL_GAS_TOUCH_MOVE = 100;
 
 module.exports = class Gas {
-    init() {
+    init(apiClient) {
+        this.apiClient = apiClient;
         this.dragY = 0;
-        this.gasValue = 0;
-        this.puttingGas = false;
         this.gasPressed = false;
-        this.gasValueOnServer = 0;
+        this.gasValue = 0;
 
         this.gasElement = document.getElementById("gas");
 
@@ -72,8 +71,6 @@ module.exports = class Gas {
 
         this.dragY = touch.clientY;
 
-        this.gasValue = 0;
-
         this.updateGasTable();
 
         this.showGas(true);
@@ -89,7 +86,7 @@ module.exports = class Gas {
                 return touches[i];
             }
         }
-        return null;
+        return undefined;
     }
 
     showGas(gasOn) {
@@ -112,54 +109,24 @@ module.exports = class Gas {
 
         this.gasValue = Math.max(-1, Math.min(1.0, this.gasValue + dGas));
 
-        this.updateGasTable();
+        this.gasValue = Math.round(this.gasValue * 100) / 100;
 
-        this.putGas();
+        this.apiClient.sendGas(this.gasValue);
+
+        this.updateGasTable();
 
         e.preventDefault();
 
         return false;
     }
 
-    putGas() {
-        if (this.puttingGas) {
-            console.log("putting gas");
-            return;
-        }
-        if (this.gasValue == this.gasValueOnServer) {
-            console.log("same gas");
-            return;
-        }
-
-        this.puttingGas = true;
-
-        var pendingGas = this.gasValue;
-        var gasContent = "gas=" + pendingGas;
-        console.info("putting gas: " + gasContent);
-
-        var request = new XMLHttpRequest();
-        request.onreadystatechange = () => {
-            if (request.readyState == XMLHttpRequest.DONE) {
-                this.gasValueOnServer = pendingGas;
-
-                this.puttingGas = false;
-
-                if (this.gasValue != this.gasValueOnServer) {
-                    this.putGas();
-                }
-            }
-        }
-
-        request.open("PUT", "/api/gas", true);
-        request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        request.send(gasContent);
-    }
-
     ontouchend(e) {
         this.gasPressed = false;
         this.gasValue = 0;
+
+        this.apiClient.sendGas(this.gasValue);
+        
         this.showGas(false);
-        this.putGas();
         this.updateGasTable();
 
         e.preventDefault();

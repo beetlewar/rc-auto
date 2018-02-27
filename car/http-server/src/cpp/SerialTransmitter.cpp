@@ -45,19 +45,31 @@ bool SerialTransmitter::setup()
 
 void SerialTransmitter::transmitGas(float value)
 {
-    if (abs(value > 1))
+    if (value > 1.0f || value < -1.0f)
     {
+        _logger->print("Invalid gas: ");
+        _logger->println(value);
         return;
     }
 
-    float delta = abs(_carGas - value);
+    float delta = _carGas - value;
+    if (delta < 0)
+    {
+        delta = -delta;
+    }
+
     if (delta < FLOAT_ACC)
     {
+        _logger->print("Too small gas delta: ");
+        _logger->println(delta);
         return;
     }
 
     binaryFloat bf;
     bf.floatingPoint = value;
+
+    _logger->print("transmitting gas: ");
+    _logger->println(value);
 
     transmitItem(GAS, bf.binary, sizeof(float));
 
@@ -66,19 +78,31 @@ void SerialTransmitter::transmitGas(float value)
 
 void SerialTransmitter::transmitWheel(float value)
 {
-    if (abs(value > 1))
+    if (value > 1.0f || value < -1.0f)
     {
+        _logger->print("Invalid wheel: ");
+        _logger->println(value);
         return;
     }
 
-    float delta = abs(_carWheel - value);
+    float delta = _carWheel - value;
+    if (delta < 0)
+    {
+        delta = -delta;
+    }
+
     if (delta < FLOAT_ACC)
     {
+        _logger->print("Too small wheel delta: ");
+        _logger->println(delta);
         return;
     }
 
     binaryFloat bf;
     bf.floatingPoint = value;
+
+    _logger->print("transmitting wheel: ");
+    _logger->println(value);
 
     transmitItem(WHEEL, bf.binary, sizeof(float));
 

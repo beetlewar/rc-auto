@@ -21,10 +21,10 @@ module.exports = class ApiClient {
             return;
         }
 
-        if (this.gasValue == this.gasValueOnServer) {
-            console.info("same gas");
-            return;
-        }
+        // if (this.gasValue == this.gasValueOnServer) {
+        //     console.info("same gas");
+        //     return;
+        // }
 
         this.puttingGas = true;
 
@@ -49,10 +49,10 @@ module.exports = class ApiClient {
             return;
         }
 
-        if (this.wheelValue == this.wheelValueOnServer) {
-            console.info("same wheel");
-            return;
-        }
+        // if (this.wheelValue == this.wheelValueOnServer) {
+        //     console.info("same wheel");
+        //     return;
+        // }
 
         this.puttingWheel = true;
 

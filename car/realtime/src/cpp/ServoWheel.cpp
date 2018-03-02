@@ -12,10 +12,14 @@ ServoWheel::ServoWheel(Logger *logger, PwmHost *pwmHost)
 
 void ServoWheel::setRotation(float value)
 {
-    if (abs(value) > 1)
+    if (value > 1.0f || value < -1.0f)
     {
         return;
     }
+    // if (abs(value) > 1)
+    // {
+    //     return;
+    // }
 
     int rotation = CENTER_ROTATION_MSEC - (value * MAX_ROTATION_MSEC);
 

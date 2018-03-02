@@ -109,7 +109,7 @@ module.exports = class Gas {
 
         this.gasValue = Math.max(-1, Math.min(1.0, this.gasValue + dGas));
 
-        this.gasValue = Math.round(this.gasValue * 100) / 100;
+        //this.gasValue = Math.round(this.gasValue * 100) / 100;
 
         this.apiClient.sendGas(this.gasValue);
 

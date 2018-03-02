@@ -116,7 +116,7 @@ module.exports = class Wheel {
 
         var wheelValue = this.wheelRotationAngle / MAX_ROTATION_ANGLE;
 
-        wheelValue = Math.round(wheelValue * 100) / 100;
+        // wheelValue = Math.round(wheelValue * 100) / 100;
 
         this.apiClient.sendWheel(wheelValue);
     }

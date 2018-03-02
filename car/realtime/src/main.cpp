@@ -19,7 +19,7 @@ void setup()
         car->setup() &&
         receiver->setup();
 
-    hm->start();
+    //hm->start();
 }
 
 void loop()

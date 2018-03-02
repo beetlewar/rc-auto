@@ -12,10 +12,14 @@ Engine::Engine(Logger *logger, PwmHost *pwmHost)
 
 void Engine::setGas(float value)
 {
-    if (abs(value) > 1)
+    if (value > 1.0f || value < -1.0f)
     {
         return;
     }
+    // if (abs(value) > 1)
+    // {
+    //     return;
+    // }
 
     int pulseWidth = NEUTRAL + (MAX_FORWARD - NEUTRAL) * value;
 

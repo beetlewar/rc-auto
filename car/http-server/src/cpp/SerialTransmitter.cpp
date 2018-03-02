@@ -52,18 +52,18 @@ void SerialTransmitter::transmitGas(float value)
         return;
     }
 
-    float delta = _carGas - value;
-    if (delta < 0)
-    {
-        delta = -delta;
-    }
+    // float delta = _carGas - value;
+    // if (delta < 0)
+    // {
+    //     delta = -delta;
+    // }
 
-    if (delta < FLOAT_ACC)
-    {
-        _logger->print("Too small gas delta: ");
-        _logger->println(delta);
-        return;
-    }
+    // if (delta < FLOAT_ACC)
+    // {
+    //     _logger->print("Too small gas delta: ");
+    //     _logger->println(delta);
+    //     return;
+    // }
 
     binaryFloat bf;
     bf.floatingPoint = value;
@@ -85,18 +85,18 @@ void SerialTransmitter::transmitWheel(float value)
         return;
     }
 
-    float delta = _carWheel - value;
-    if (delta < 0)
-    {
-        delta = -delta;
-    }
+    // float delta = _carWheel - value;
+    // if (delta < 0)
+    // {
+    //     delta = -delta;
+    // }
 
-    if (delta < FLOAT_ACC)
-    {
-        _logger->print("Too small wheel delta: ");
-        _logger->println(delta);
-        return;
-    }
+    // if (delta < FLOAT_ACC)
+    // {
+    //     _logger->print("Too small wheel delta: ");
+    //     _logger->println(delta);
+    //     return;
+    // }
 
     binaryFloat bf;
     bf.floatingPoint = value;

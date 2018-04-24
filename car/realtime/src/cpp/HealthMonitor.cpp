@@ -1,6 +1,6 @@
 #include "Includes.h"
 
-const int HM_TIMEOUT_MSEC = 1000;
+const int HM_TIMEOUT_MSEC = 2000;
 
 HealthMonitor::HealthMonitor(Logger *logger, Car *car)
 {

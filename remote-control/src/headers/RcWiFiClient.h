@@ -29,4 +29,6 @@ public:
   void sendGas(float value);
 
   void sendWheel(float value);
+
+  void sendKeepAlive();
 };

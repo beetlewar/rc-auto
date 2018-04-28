@@ -12,3 +12,4 @@ extern "C" {
 #include "headers/JoystickReader.h"
 #include "headers/CarState.h"
 #include "headers/CarStateSender.h"
+#include "headers/SystemIndicator.h"

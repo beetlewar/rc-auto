@@ -42,7 +42,7 @@ float JoystickReader::read()
         result = 1;
     }
 
-    _logger->println(result);
+    //_logger->println(result);
 
     return result;
 }

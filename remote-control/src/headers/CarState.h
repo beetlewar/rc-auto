@@ -6,7 +6,7 @@ class CarState
 {
 private:
   Logger *_logger;
-  os_timer_t _timer;
+  //os_timer_t _timer;
   JoystickReader *_joyWheel;
   JoystickReader *_joyGas;
   float _gas;
@@ -19,7 +19,7 @@ private:
 public:
   CarState(Logger *logger);
 
-  void start(int periodMSec);
+  //void start(int periodMSec);
 
   void loop();
 

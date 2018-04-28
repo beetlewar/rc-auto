@@ -2,7 +2,7 @@
 
 const int joystickInputPin = A0;
 const int joystickOutputX = D5;
-const int joystickOutputY = D7;
+const int joystickOutputY = D1;
 
 CarState::CarState(Logger *logger)
 {
@@ -16,24 +16,18 @@ CarState::CarState(Logger *logger)
     _joyWheel = new JoystickReader(
         logger,
         joystickInputPin,
-        20,
-        940,
-        390,
-        470);
+        100,
+        800,
+        400,
+        500);
 
     _joyGas = new JoystickReader(
         logger,
         joystickInputPin,
-        20,
-        940,
-        390,
-        470);
-}
-
-void carStateTick(void *pArg)
-{
-    CarState *car = (CarState *)pArg;
-    car->loop();
+        100,
+        800,
+        400,
+        500);
 }
 
 void CarState::loop()
@@ -46,6 +40,8 @@ void CarState::measureGas()
 {
     digitalWrite(joystickOutputY, HIGH);
 
+    delay(2);
+
     _gas = _joyGas->read();
 
     digitalWrite(joystickOutputY, LOW);
@@ -55,13 +51,9 @@ void CarState::measureWheel()
 {
     digitalWrite(joystickOutputX, HIGH);
 
+    delay(2);
+
     _wheel = _joyWheel->read();
 
     digitalWrite(joystickOutputX, LOW);
-}
-
-void CarState::start(int periodMSec)
-{
-    os_timer_setfn(&_timer, carStateTick, this);
-    os_timer_arm(&_timer, periodMSec, true);
 }

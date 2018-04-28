@@ -39,6 +39,11 @@ void RcWiFiClient::sendWheel(float value)
     put("/api/wheel", content);
 }
 
+void RcWiFiClient::sendKeepAlive()
+{
+    put("/api/keepAlive", "hello=world");
+}
+
 void RcWiFiClient::put(String uri, String content)
 {
     WiFiClient client;
@@ -49,13 +54,10 @@ void RcWiFiClient::put(String uri, String content)
     }
 
     String request = String("PUT " + uri + " HTTP/1.1\r\n") +
-                     "Host: " + _host + "\r\n" +
-                     "Connection: close\r\n" +
                      "Content-Type: application/x-www-form-urlencoded\r\n" +
                      "Content-Length: " + content.length() + "\r\n\r\n" +
-                     content + "\r\n\r\n";
+                     content + "\r\n";
 
     client.print(request);
-
-    client.stop();
+    client.stopAll();
 }

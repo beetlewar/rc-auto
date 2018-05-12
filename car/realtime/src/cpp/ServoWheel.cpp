@@ -1,7 +1,7 @@
 #include "Includes.h"
 
 const int WHEEL_PIN = D1;
-const float MAX_ROTATION_MSEC = 450;
+const float MAX_ROTATION_MSEC = 300;
 const float CENTER_ROTATION_MSEC = 1500;
 
 ServoWheel::ServoWheel(Logger *logger, PwmHost *pwmHost)
@@ -16,10 +16,6 @@ void ServoWheel::setRotation(float value)
     {
         return;
     }
-    // if (abs(value) > 1)
-    // {
-    //     return;
-    // }
 
     int rotation = CENTER_ROTATION_MSEC - (value * MAX_ROTATION_MSEC);
 

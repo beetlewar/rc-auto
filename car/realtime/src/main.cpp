@@ -30,4 +30,5 @@ void loop()
     }
 
     receiver->loop();
+    delay(1);
 }

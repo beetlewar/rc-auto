@@ -3,6 +3,8 @@
 const int ENGINE_PIN = D3;
 const float NEUTRAL = 1500;
 const float MAX_FORWARD = 2000;
+const float FORWARD_POWER = 0.6f;
+const float BACKWARD_POWER = 0.3f;
 
 Engine::Engine(Logger *logger, PwmHost *pwmHost)
 {
@@ -16,12 +18,19 @@ void Engine::setGas(float value)
     {
         return;
     }
-    // if (abs(value) > 1)
-    // {
-    //     return;
-    // }
 
-    int pulseWidth = NEUTRAL + (MAX_FORWARD - NEUTRAL) * value;
+    float gas = value;
+
+    if (value >= 0)
+    {
+        gas *= FORWARD_POWER;
+    }
+    else
+    {
+        gas *= BACKWARD_POWER;
+    }
+
+    int pulseWidth = NEUTRAL + (MAX_FORWARD - NEUTRAL) * gas;
 
     _logger->print("Setting gas at ");
     _logger->print(pulseWidth);

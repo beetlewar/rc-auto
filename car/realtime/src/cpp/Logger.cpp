@@ -1,6 +1,6 @@
 #include "Includes.h"
 
-#define DEBUG
+//#define DEBUG
 
 bool Logger::setup(int serialSpeed)
 {

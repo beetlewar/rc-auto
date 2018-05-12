@@ -44,7 +44,7 @@ void loop()
     }
 
     rcHost->loop();
-    //delay(1);
+    delay(1);
 }
 
 #endif

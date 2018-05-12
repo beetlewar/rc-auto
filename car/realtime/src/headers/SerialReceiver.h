@@ -13,7 +13,7 @@ private:
   SerialPortSerializer *_serializer;
 
 private:
-  void handleMessage(uint8_t *data);
+  void handleMessage(uint8_t *bytes);
 
 public:
   SerialReceiver(Logger *logger, Car *car, HealthMonitor *hm);
@@ -24,5 +24,5 @@ public:
 
   void loop();
 
-  float readFloat(uint8_t *bytes);
+  float readFloat(uint8_t **bytes);
 };

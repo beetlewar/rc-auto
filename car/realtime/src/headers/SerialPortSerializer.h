@@ -24,7 +24,7 @@ class SerialPortSerializer
 
     bool ready();
 
-    bool getData(SerialPortData *destination);
+    void pushState(SerialPortData *destination);
 
   private:
     void processHeader(uint8_t byte);

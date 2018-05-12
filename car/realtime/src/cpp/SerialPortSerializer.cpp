@@ -61,16 +61,14 @@ bool SerialPortSerializer::ready()
     return _state == DONE;
 }
 
-bool SerialPortSerializer::getData(SerialPortData *destination)
+void SerialPortSerializer::pushState(SerialPortData *destination)
 {
     if (!ready())
     {
-        return false;
+        return;
     }
 
     destination->copyData(_body, _bodySize.shortValue);
-
-    return true;
 }
 
 void SerialPortSerializer::processHeader(uint8_t byte)

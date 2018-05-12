@@ -2,20 +2,13 @@
 
 const int SERIAL_RX = D6;
 
-enum transmittionItemType
-{
-    WHEEL,
-    GAS,
-    KEEP_ALIVE
-};
-
 SerialReceiver::SerialReceiver(Logger *logger, Car *car, HealthMonitor *hm)
 {
     _logger = logger;
     _car = car;
     _hm = hm;
 
-    uint16_t bufSize = sizeof(uint8_t) + sizeof(float);
+    uint16_t bufSize = sizeof(float) * 2;
 
     _serial = new SoftwareSerial(SERIAL_RX, SW_SERIAL_UNUSED_PIN);
     _serializer = new SerialPortSerializer(bufSize);
@@ -49,47 +42,39 @@ void SerialReceiver::loop()
 
         if (_serializer->ready())
         {
-            _serializer->getData(_serializerData);
+            _serializer->pushState(_serializerData);
 
             handleMessage(_serializerData->data());
         }
     }
 }
 
-void SerialReceiver::handleMessage(uint8_t *data)
+void SerialReceiver::handleMessage(uint8_t *bytes)
 {
-    uint8_t messageType = data[0];
-    ++data;
+    float gas = readFloat(&bytes);
+    _car->setGas(gas);
 
-    switch (messageType)
-    {
-    case WHEEL:
-    {
-        float wheel = readFloat(data);
-        _car->setWheel(wheel);
-        break;
-    }
-    case GAS:
-    {
-        float gas = readFloat(data);
-        _car->setGas(gas);
-        break;
-    }
-    case KEEP_ALIVE:
-    {
-        _hm->keepAlive();
-        break;
-    }
-    }
+    float wheel = readFloat(&bytes);
+    _car->setWheel(wheel);
+
+    _hm->keepAlive();
 }
 
-float SerialReceiver::readFloat(uint8_t *bytes)
+float SerialReceiver::readFloat(uint8_t **bytes)
 {
     binaryFloat bf;
-    bf.binary[0] = bytes[0];
-    bf.binary[1] = bytes[1];
-    bf.binary[2] = bytes[2];
-    bf.binary[3] = bytes[3];
+    bf.binary[0] = **bytes;
+    (*bytes)++;
+    bf.binary[1] = **bytes;
+    (*bytes)++;
+    bf.binary[2] = **bytes;
+    (*bytes)++;
+    bf.binary[3] = **bytes;
+    (*bytes)++;
+    // bf.binary[0] = bytes[0];
+    // bf.binary[1] = bytes[1];
+    // bf.binary[2] = bytes[2];
+    // bf.binary[3] = bytes[3];
 
     return bf.floatingPoint;
 }

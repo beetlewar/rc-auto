@@ -7,6 +7,7 @@
 #include "DNSServer.h"
 #include "SoftwareSerial.h"
 
+#include "headers\CarState.h"
 #include "headers\Logger.h"
 #include "headers\FileSystem.h"
 #include "headers\SerialTransmitter.h"

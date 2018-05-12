@@ -28,11 +28,7 @@ private:
 
   void handleAppScript();
 
-  void handleGas();
-
-  void handleWheel();
-
-  void handleKeepAlive();
+  void handleState();
 
   void sendFile(String path, String contentType);
 

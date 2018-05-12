@@ -1,8 +1,5 @@
 #include "Includes.h"
 
-const byte DNS_PORT = 53;
-const String DNS = "www.rchost.ru";
-
 WiFiRcHost::WiFiRcHost(
     Logger *logger,
     FileSystem *fileSystem,
@@ -15,18 +12,11 @@ WiFiRcHost::WiFiRcHost(
 
 void WiFiRcHost::loop()
 {
-    //_dnsServer.processNextRequest();
     _server.handleClient();
 }
 
 bool WiFiRcHost::setup()
 {
-    // _dnsServer.setErrorReplyCode(DNSReplyCode::ServerFailure);
-    // _dnsServer.start(DNS_PORT, DNS, IPAddress(192, 168, 4, 1));
-
-    // _logger->print("DNS: ");
-    // _logger->println(DNS);
-
     _server.begin();
 
     _server.on("/", HTTP_GET, std::bind(&WiFiRcHost::handleRoot, this));
@@ -34,9 +24,7 @@ bool WiFiRcHost::setup()
     _server.on("/images/gas.png", std::bind(&WiFiRcHost::handleGasImage, this));
     _server.on("/images/wheel.png", std::bind(&WiFiRcHost::handleWheelImage, this));
     _server.on("/app.js", HTTP_GET, std::bind(&WiFiRcHost::handleAppScript, this));
-    _server.on("/api/gas", HTTP_PUT, std::bind(&WiFiRcHost::handleGas, this));
-    _server.on("/api/wheel", HTTP_PUT, std::bind(&WiFiRcHost::handleWheel, this));
-    _server.on("/api/keepAlive", HTTP_PUT, std::bind(&WiFiRcHost::handleKeepAlive, this));
+    _server.on("/api/state", HTTP_POST, std::bind(&WiFiRcHost::handleState, this));
 
     _logger->println("Http server started at port 80.");
 
@@ -76,39 +64,27 @@ void WiFiRcHost::handleAppScript()
     _server.send(200, "application/javascript", content);
 }
 
-void WiFiRcHost::handleGas()
+void WiFiRcHost::handleState()
 {
-    _logger->println("Handling API gas.");
+    _logger->println("Handling state.");
 
     String gasString = _server.arg("gas");
     float gas = gasString.toFloat();
+
     _logger->print("gas: ");
     _logger->println(gas);
 
-    _serialTransmitter->transmitGas(gas);
-
-    _server.send(200);
-}
-
-void WiFiRcHost::handleWheel()
-{
-    _logger->println("Handling API wheel.");
-
     String wheelString = _server.arg("wheel");
     float wheel = wheelString.toFloat();
+
     _logger->print("wheel: ");
     _logger->println(wheel);
 
-    _serialTransmitter->transmitWheel(wheel);
+    CarState state;
+    state.gas = gas;
+    state.wheel = wheel;
 
-    _server.send(200);
-}
-
-void WiFiRcHost::handleKeepAlive()
-{
-    _logger->println("Handling API KeepAlive.");
-
-    _serialTransmitter->transmitKeepAlive();
+    _serialTransmitter->transmitState(&state);
 
     _server.send(200);
 }

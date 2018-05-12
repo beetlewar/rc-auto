@@ -17,11 +17,7 @@ public:
 
   bool setup();
 
-  void transmitGas(float value);
-
-  void transmitWheel(float value);
-
-  void transmitKeepAlive();
+  void transmitState(CarState *state);
 
 private:
   void transmitItem(uint8_t type, uint8_t *bytes, int size);
@@ -30,7 +26,7 @@ private:
 
   void transmitBodySize(uint16_t size);
 
-  void transmitBody(uint8_t type, uint8_t *bytes, int size);
+  void transmitBytes(uint8_t *bytes, int length);
 
   void transmitTail();
 };

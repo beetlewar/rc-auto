@@ -25,26 +25,12 @@ bool RcWiFiClient::ready()
     return WiFi.status() == WL_CONNECTED;
 }
 
-void RcWiFiClient::sendGas(float value)
+void RcWiFiClient::sendState(CarState *state)
 {
-    String content = "gas=" + String(value);
-
-    put("/api/gas", content);
+    post("/api/state", "gas=" + String(state->gas) + "&wheel=" + String(state->wheel));
 }
 
-void RcWiFiClient::sendWheel(float value)
-{
-    String content = "wheel=" + String(value);
-
-    put("/api/wheel", content);
-}
-
-void RcWiFiClient::sendKeepAlive()
-{
-    put("/api/keepAlive", "hello=world");
-}
-
-void RcWiFiClient::put(String uri, String content)
+void RcWiFiClient::post(String uri, String content)
 {
     WiFiClient client;
     if (!client.connect(_host, _port))
@@ -53,7 +39,7 @@ void RcWiFiClient::put(String uri, String content)
         return;
     }
 
-    String request = String("PUT " + uri + " HTTP/1.1\r\n") +
+    String request = String("POST " + uri + " HTTP/1.1\r\n") +
                      "Content-Type: application/x-www-form-urlencoded\r\n" +
                      "Content-Length: " + content.length() + "\r\n\r\n" +
                      content + "\r\n";

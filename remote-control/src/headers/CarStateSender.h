@@ -6,7 +6,7 @@ class CarStateSender
 {
 private:
   Logger *_logger;
-  CarState *_carState;
+  Car *_car;
   RcWiFiClient *_client;
   float _sentGas;
   float _sentWheel;
@@ -15,13 +15,11 @@ private:
 public:
   CarStateSender(
       Logger *logger,
-      CarState *carState,
+      Car *car,
       RcWiFiClient *client);
 
   void loop();
 
 private:
-  void sendGas();
-  void sendWheel();
-  void sendKeepAlive();
+  void sendState();
 };

@@ -58,6 +58,8 @@ void SerialReceiver::handleMessage(uint8_t *bytes)
     _car->setWheel(wheel);
 
     _hm->keepAlive();
+
+    _logger->println("State received: gas=" + String(gas) + ", wheel=" + String(wheel));
 }
 
 float SerialReceiver::readFloat(uint8_t **bytes)

@@ -1,25 +1,11 @@
 #include "Includes.h"
 
-const int HM_TIMEOUT_MSEC = 2000;
+const int HM_TIMEOUT_MSEC = 500;
 
 HealthMonitor::HealthMonitor(Logger *logger, Car *car)
 {
     _logger = logger;
     _car = car;
-}
-
-void hmHostTick(void *pArg)
-{
-    HealthMonitor *hm = (HealthMonitor *)pArg;
-    hm->loop();
-}
-
-void HealthMonitor::start()
-{
-    _lastKeepAlive = millis();
-
-    os_timer_setfn(&_hmTimer, hmHostTick, this);
-    os_timer_arm(&_hmTimer, HM_TIMEOUT_MSEC, true);
 }
 
 void HealthMonitor::loop()
@@ -33,6 +19,8 @@ void HealthMonitor::loop()
         _car->setWheel(0);
 
         _logger->println("No keep alive received. Car is stopped.");
+
+        _lastKeepAlive = currentTime;
     }
 }
 

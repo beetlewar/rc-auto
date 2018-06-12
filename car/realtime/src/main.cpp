@@ -18,8 +18,6 @@ void setup()
         logger->setup(9600) &&
         car->setup() &&
         receiver->setup();
-
-    hm->start();
 }
 
 void loop()
@@ -30,5 +28,6 @@ void loop()
     }
 
     receiver->loop();
+    hm->loop();
     delay(1);
 }

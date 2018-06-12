@@ -3,8 +3,8 @@
 const int ENGINE_PIN = D3;
 const float NEUTRAL = 1500;
 const float MAX_FORWARD = 2000;
-const float FORWARD_POWER = 0.6f;
-const float BACKWARD_POWER = 0.3f;
+const float FORWARD_POWER = 0.3f;
+const float BACKWARD_POWER = 0.2f;
 
 Engine::Engine(Logger *logger, PwmHost *pwmHost)
 {

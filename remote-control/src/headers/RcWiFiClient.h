@@ -12,7 +12,7 @@ private:
   int _port;
 
 private:
-  void put(String uri, String content);
+  void post(String uri, String content);
 
 public:
   RcWiFiClient(
@@ -26,9 +26,5 @@ public:
 
   bool ready();
 
-  void sendGas(float value);
-
-  void sendWheel(float value);
-
-  void sendKeepAlive();
+  void sendState(CarState *state);
 };

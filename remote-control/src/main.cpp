@@ -2,7 +2,7 @@
 
 Logger *logger;
 RcWiFiClient *wifiClient;
-CarState *carState;
+Car *car;
 CarStateSender *carStateSender;
 SystemIndicator *systemIndicator;
 
@@ -35,9 +35,9 @@ void setup()
         ip,
         port);
 
-    carState = new CarState(logger);
+    car = new Car(logger);
 
-    carStateSender = new CarStateSender(logger, carState, wifiClient);
+    carStateSender = new CarStateSender(logger, car, wifiClient);
 
     systemIndicator = new SystemIndicator(logger, wifiClient);
 
@@ -50,10 +50,10 @@ void loop()
 {
     if (wifiClient->ready())
     {
-        carState->loop();
+        car->loop();
         carStateSender->loop();
         systemIndicator->loop();
-        delay(10);
+        delay(50);
     }
     else
     {

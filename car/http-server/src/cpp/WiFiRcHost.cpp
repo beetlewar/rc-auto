@@ -66,19 +66,12 @@ void WiFiRcHost::handleAppScript()
 
 void WiFiRcHost::handleState()
 {
-    _logger->println("Handling state.");
 
     String gasString = _server.arg("gas");
     float gas = gasString.toFloat();
 
-    _logger->print("gas: ");
-    _logger->println(gas);
-
     String wheelString = _server.arg("wheel");
     float wheel = wheelString.toFloat();
-
-    _logger->print("wheel: ");
-    _logger->println(wheel);
 
     CarState state;
     state.gas = gas;
@@ -87,6 +80,12 @@ void WiFiRcHost::handleState()
     _serialTransmitter->transmitState(&state);
 
     _server.send(200);
+
+    _logger->println("State handled.");
+    _logger->print("gas: ");
+    _logger->println(gas);
+    _logger->print("wheel: ");
+    _logger->println(wheel);
 }
 
 void WiFiRcHost::sendFile(String path, String contentType)

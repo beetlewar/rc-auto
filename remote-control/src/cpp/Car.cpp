@@ -4,7 +4,7 @@ const int joystickInputPin = A0;
 const int joystickOutputX = D5;
 const int joystickOutputY = D1;
 
-CarState::CarState(Logger *logger)
+Car::Car(Logger *logger)
 {
     _gas = 0;
     _wheel = 0;
@@ -30,28 +30,28 @@ CarState::CarState(Logger *logger)
         500);
 }
 
-void CarState::loop()
+void Car::loop()
 {
     measureGas();
     measureWheel();
 }
 
-void CarState::measureGas()
+void Car::measureGas()
 {
     digitalWrite(joystickOutputY, HIGH);
 
-    delay(2);
+    delay(1);
 
     _gas = _joyGas->read();
 
     digitalWrite(joystickOutputY, LOW);
 }
 
-void CarState::measureWheel()
+void Car::measureWheel()
 {
     digitalWrite(joystickOutputX, HIGH);
 
-    delay(2);
+    delay(1);
 
     _wheel = _joyWheel->read();
 

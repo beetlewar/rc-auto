@@ -2,6 +2,13 @@
 
 #include "Includes.h"
 
+enum CAR_STATE
+{
+  CAR_STATE_ALIVE = 0,
+  CAR_STATE_HOST_TIMEOUT = 1,
+  CAR_STATE_CLIENT_TIMEOUT = 2
+};
+
 class Car
 {
 private:
@@ -10,6 +17,13 @@ private:
   ServoWheel *_wheel;
   PwmHost *_pwmHost;
 
+  unsigned long _lastKeepAliveTime;
+  unsigned long _lastServerTime;
+  unsigned long _lastUpdateTime;
+  float _lastGas;
+  float _lastWheel;
+  int _state;
+
 public:
   Car(Logger *logger);
 
@@ -17,7 +31,15 @@ public:
 
   bool setup();
 
-  void setGas(float gas);
+  void loop();
 
-  void setWheel(float wheel);
+  void setState(
+      unsigned long keepAliveTime,
+      unsigned long serverTime,
+      float gas,
+      float wheel);
+
+private:
+  int checkState();
+  void logStateChange(int state);
 };

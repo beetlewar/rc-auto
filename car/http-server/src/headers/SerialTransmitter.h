@@ -13,20 +13,18 @@ private:
 public:
   SerialTransmitter(Logger *logger);
 
-  ~SerialTransmitter();
-
   bool setup();
 
-  void transmitState(CarState *state);
+  void transmit(uint8_t *bytes, unsigned long size);
 
 private:
-  void transmitItem(uint8_t type, uint8_t *bytes, int size);
+  void transmitItem(uint8_t type, uint8_t *bytes, unsigned long size);
 
   void transmitHeader();
 
   void transmitBodySize(uint16_t size);
 
-  void transmitBytes(uint8_t *bytes, int length);
+  void transmitBytes(uint8_t *bytes, unsigned long length);
 
   void transmitTail();
 };

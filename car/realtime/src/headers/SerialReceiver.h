@@ -6,23 +6,19 @@ class SerialReceiver
 {
 private:
   Logger *_logger;
-  Car *_car;
-  HealthMonitor *_hm;
   SoftwareSerial *_serial;
-  SerialPortData *_serializerData;
   SerialPortSerializer *_serializer;
+  MessageHandler *_messageHandler;
 
 private:
   void handleMessage(uint8_t *bytes);
 
 public:
-  SerialReceiver(Logger *logger, Car *car, HealthMonitor *hm);
-
-  ~SerialReceiver();
+  SerialReceiver(
+      Logger *logger,
+      MessageHandler *messageHandler);
 
   bool setup();
 
   void loop();
-
-  float readFloat(uint8_t **bytes);
 };

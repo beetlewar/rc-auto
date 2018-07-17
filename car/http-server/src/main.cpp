@@ -8,16 +8,22 @@ Logger *logger = NULL;
 FileSystem *fileSystem = NULL;
 WiFiAccessPoint *accessPoint = NULL;
 WiFiRcHost *rcHost = NULL;
-SerialTransmitter *transmitter;
+SerialTransmitter *transmitter = NULL;
+StateOwner *stateOwner = NULL;
+MessageDispatcher *messageDispatcher = NULL;
+SerialSerializer *serializer = NULL;
 
 void setup()
 {
     logger = new Logger();
 
+    serializer = new SerialSerializer();
+    stateOwner = new StateOwner();
     fileSystem = new FileSystem(logger);
     accessPoint = new WiFiAccessPoint(logger);
     transmitter = new SerialTransmitter(logger);
-    rcHost = new WiFiRcHost(logger, fileSystem, transmitter);
+    rcHost = new WiFiRcHost(logger, fileSystem, transmitter, stateOwner);
+    messageDispatcher = new MessageDispatcher(logger, stateOwner, transmitter, serializer);
 
     initialized =
         logger->setup(9600) &&
@@ -44,6 +50,8 @@ void loop()
     }
 
     rcHost->loop();
+    messageDispatcher->loop();
+
     delay(1);
 }
 

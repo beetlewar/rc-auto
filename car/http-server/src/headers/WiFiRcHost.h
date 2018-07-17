@@ -9,9 +9,14 @@ private:
   Logger *_logger;
   FileSystem *_fileSystem;
   SerialTransmitter *_serialTransmitter;
+  StateOwner *_stateOwner;
 
 public:
-  WiFiRcHost(Logger *logger, FileSystem *fileSystem, SerialTransmitter *serialTransmitter);
+  WiFiRcHost(
+      Logger *logger,
+      FileSystem *fileSystem,
+      SerialTransmitter *serialTransmitter,
+      StateOwner *stateOwner);
 
   bool setup();
 

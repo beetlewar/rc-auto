@@ -1,10 +1,5 @@
 #include "../Includes.h"
 
-const int WIFI_STATUS_INDICATOR_PIN = D7;
-const unsigned long BLINK_ON_TIMEOUT = 100;
-const unsigned long BLINK_OFF_WIFI_FAIL_TIMEOUT = 300;
-const unsigned long BLINK_OFF_WIFI_OK_TIMEOUT = 2000;
-
 SystemIndicator::SystemIndicator(
     Logger *logger,
     RcWiFiClient *wifiClient)

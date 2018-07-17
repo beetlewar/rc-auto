@@ -1,21 +1,17 @@
 #include "../Includes.h"
 
-const int joystickInputPin = A0;
-const int joystickOutputX = D5;
-const int joystickOutputY = D1;
-
 Car::Car(Logger *logger)
 {
     _gas = 0;
     _wheel = 0;
 
-    pinMode(joystickInputPin, INPUT);
-    pinMode(joystickOutputX, OUTPUT);
-    pinMode(joystickOutputY, OUTPUT);
+    pinMode(JOYSTICK_INPUT_PIN, INPUT);
+    pinMode(JOYSTICK_OUTPUT_X, OUTPUT);
+    pinMode(JOYSTICK_OUTPUT_Y, OUTPUT);
 
     _joyWheel = new JoystickReader(
         logger,
-        joystickInputPin,
+        JOYSTICK_INPUT_PIN,
         100,
         800,
         400,
@@ -23,7 +19,7 @@ Car::Car(Logger *logger)
 
     _joyGas = new JoystickReader(
         logger,
-        joystickInputPin,
+        JOYSTICK_INPUT_PIN,
         100,
         800,
         400,
@@ -38,22 +34,22 @@ void Car::loop()
 
 void Car::measureGas()
 {
-    digitalWrite(joystickOutputY, HIGH);
+    digitalWrite(JOYSTICK_OUTPUT_Y, HIGH);
 
     delay(1);
 
     _gas = _joyGas->read();
 
-    digitalWrite(joystickOutputY, LOW);
+    digitalWrite(JOYSTICK_OUTPUT_Y, LOW);
 }
 
 void Car::measureWheel()
 {
-    digitalWrite(joystickOutputX, HIGH);
+    digitalWrite(JOYSTICK_OUTPUT_X, HIGH);
 
     delay(1);
 
     _wheel = _joyWheel->read();
 
-    digitalWrite(joystickOutputX, LOW);
+    digitalWrite(JOYSTICK_OUTPUT_X, LOW);
 }

@@ -11,15 +11,17 @@ extern "C" {
 #include "user_interface.h"
 }
 
-#include "headers\Logger.h"
-#include "headers\typedefs.h"
+#include "..\..\..\shared\headers\Const.h"
+#include "..\..\..\shared\headers\Unions.h"
+#include "..\..\..\shared\headers\SerialSerializer.h"
+#include "..\..\..\shared\headers\Logger.h"
+
 #include "headers\Pwm.h"
 #include "headers\PwmComparer.h"
 #include "headers\PwmHost.h"
 #include "headers\Engine.h"
 #include "headers\ServoWheel.h"
 #include "headers\Car.h"
-#include "headers\HealthMonitor.h"
-#include "headers\SerialPortData.h"
+#include "headers\MessageHandler.h"
 #include "headers\SerialPortSerializer.h"
 #include "headers\SerialReceiver.h"

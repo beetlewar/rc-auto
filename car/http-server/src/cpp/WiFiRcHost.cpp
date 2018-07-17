@@ -3,11 +3,13 @@
 WiFiRcHost::WiFiRcHost(
     Logger *logger,
     FileSystem *fileSystem,
-    SerialTransmitter *serialTransmitter)
+    SerialTransmitter *serialTransmitter,
+    StateOwner *stateOwner)
 {
     _logger = logger;
     _fileSystem = fileSystem;
     _serialTransmitter = serialTransmitter;
+    _stateOwner = stateOwner;
 }
 
 void WiFiRcHost::loop()
@@ -66,26 +68,20 @@ void WiFiRcHost::handleAppScript()
 
 void WiFiRcHost::handleState()
 {
-
     String gasString = _server.arg("gas");
     float gas = gasString.toFloat();
 
     String wheelString = _server.arg("wheel");
     float wheel = wheelString.toFloat();
 
-    CarState state;
-    state.gas = gas;
-    state.wheel = wheel;
+    CarState state(gas, wheel, millis());
 
-    _serialTransmitter->transmitState(&state);
-
-    _server.send(200);
+    _stateOwner->setCarState(state);
 
     _logger->println("State handled.");
-    _logger->print("gas: ");
-    _logger->println(gas);
-    _logger->print("wheel: ");
-    _logger->println(wheel);
+    _logger->println("gas: " + String(gas) + ", wheel: " + String(wheel) + ", at: " + String(state.keepAliveTime()));
+
+    _server.send(200);
 }
 
 void WiFiRcHost::sendFile(String path, String contentType)

@@ -5,14 +5,16 @@ bool initialized = false;
 Logger *logger = NULL;
 Car *car = NULL;
 SerialReceiver *receiver = NULL;
-HealthMonitor *hm = NULL;
+SerialSerializer *serializer = NULL;
+MessageHandler *messageHandler = NULL;
 
 void setup()
 {
     logger = new Logger();
     car = new Car(logger);
-    hm = new HealthMonitor(logger, car);
-    receiver = new SerialReceiver(logger, car, hm);
+    serializer = new SerialSerializer();
+    messageHandler = new MessageHandler(logger, serializer, car);
+    receiver = new SerialReceiver(logger, messageHandler);
 
     initialized =
         logger->setup(9600) &&
@@ -28,6 +30,6 @@ void loop()
     }
 
     receiver->loop();
-    hm->loop();
+    car->loop();
     delay(1);
 }

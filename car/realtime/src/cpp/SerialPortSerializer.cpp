@@ -9,15 +9,16 @@ enum serializerState
     DONE
 };
 
-const String HEADER_VALUE = "Hello";
-const String TAIL_VALUE = "World";
-
-SerialPortSerializer::SerialPortSerializer(uint16_t bufSize)
+SerialPortSerializer::SerialPortSerializer(
+    Logger *logger,
+    uint16_t bufSize)
 {
-    _header = new uint8_t[HEADER_VALUE.length()];
-    _body = new uint8_t[bufSize];
+    _logger = logger;
     _bufSize = bufSize;
-    _tail = new uint8_t[TAIL_VALUE.length()];
+
+    _header = new uint8_t[TRANSPORT_HEADER_VALUE.length()];
+    _body = new uint8_t[bufSize];
+    _tail = new uint8_t[TRANSPORT_TAIL_VALUE.length()];
     _state = HEADER;
 
     moveToHeader();
@@ -61,14 +62,9 @@ bool SerialPortSerializer::ready()
     return _state == DONE;
 }
 
-void SerialPortSerializer::pushState(SerialPortData *destination)
+uint8_t *SerialPortSerializer::getPayload()
 {
-    if (!ready())
-    {
-        return;
-    }
-
-    destination->copyData(_body, _bodySize.shortValue);
+    return _body;
 }
 
 void SerialPortSerializer::processHeader(uint8_t byte)
@@ -94,12 +90,12 @@ void SerialPortSerializer::moveToHeader()
 
 bool SerialPortSerializer::checkHeaderSymbol()
 {
-    return _header[_position] == HEADER_VALUE[_position];
+    return _header[_position] == TRANSPORT_HEADER_VALUE[_position];
 }
 
 bool SerialPortSerializer::isHeaderReceived()
 {
-    return _position == HEADER_VALUE.length() - 1;
+    return _position == TRANSPORT_HEADER_VALUE.length() - 1;
 }
 
 void SerialPortSerializer::processBodySize(uint8_t byte)
@@ -109,7 +105,7 @@ void SerialPortSerializer::processBodySize(uint8_t byte)
 
     if (isBodySizeReceived())
     {
-        if (_bodySize.shortValue <= 0 || _bodySize.shortValue > _bufSize)
+        if (_bodySize.value <= 0 || _bodySize.value > _bufSize)
         {
             moveToHeader();
         }
@@ -150,7 +146,7 @@ void SerialPortSerializer::moveToBody()
 
 bool SerialPortSerializer::isBodyReceived()
 {
-    return _position == _bodySize.shortValue - 1;
+    return _position == (unsigned int)_bodySize.value - 1;
 }
 
 void SerialPortSerializer::processTail(uint8_t byte)
@@ -176,12 +172,12 @@ void SerialPortSerializer::moveToTail()
 
 bool SerialPortSerializer::checkTailSymbol()
 {
-    return _tail[_position] == TAIL_VALUE[_position];
+    return _tail[_position] == TRANSPORT_TAIL_VALUE[_position];
 }
 
 bool SerialPortSerializer::isTailReceived()
 {
-    return _position == TAIL_VALUE.length() - 1;
+    return _position == TRANSPORT_TAIL_VALUE.length() - 1;
 }
 
 void SerialPortSerializer::processDone(uint8_t byte)

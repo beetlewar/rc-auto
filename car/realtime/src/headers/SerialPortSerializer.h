@@ -4,47 +4,49 @@
 
 class SerialPortSerializer
 {
-  private:
-    uint8_t *_header;
-    binaryShort _bodySize;
-    uint8_t *_body;
-    uint8_t *_tail;
+private:
+  Logger *_logger;
 
-    uint16_t _bufSize;
+  uint8_t *_header;
+  binaryShort _bodySize;
+  uint8_t *_body;
+  uint8_t *_tail;
 
-    uint8_t _state;
-    int _position;
+  uint16_t _bufSize;
 
-  public:
-    SerialPortSerializer(uint16_t bufSize);
+  uint8_t _state;
+  unsigned int _position;
 
-    ~SerialPortSerializer();
+public:
+  SerialPortSerializer(Logger *logger, uint16_t bufSize);
 
-    void addByte(uint8_t byte);
+  ~SerialPortSerializer();
 
-    bool ready();
+  void addByte(uint8_t byte);
 
-    void pushState(SerialPortData *destination);
+  bool ready();
 
-  private:
-    void processHeader(uint8_t byte);
-    void moveToHeader();
-    bool checkHeaderSymbol();
-    bool isHeaderReceived();
+  uint8_t *getPayload();
 
-    void processBodySize(uint8_t byte);
-    void moveToBodySize();
-    bool isBodySizeReceived();
+private:
+  void processHeader(uint8_t byte);
+  void moveToHeader();
+  bool checkHeaderSymbol();
+  bool isHeaderReceived();
 
-    void processBody(uint8_t byte);
-    void moveToBody();
-    bool isBodyReceived();
+  void processBodySize(uint8_t byte);
+  void moveToBodySize();
+  bool isBodySizeReceived();
 
-    void processTail(uint8_t byte);
-    void moveToTail();
-    bool checkTailSymbol();
-    bool isTailReceived();
+  void processBody(uint8_t byte);
+  void moveToBody();
+  bool isBodyReceived();
 
-    void processDone(uint8_t byte);
-    void moveToDone();
+  void processTail(uint8_t byte);
+  void moveToTail();
+  bool checkTailSymbol();
+  bool isTailReceived();
+
+  void processDone(uint8_t byte);
+  void moveToDone();
 };

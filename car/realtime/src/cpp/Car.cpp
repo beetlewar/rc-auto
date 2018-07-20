@@ -4,9 +4,8 @@ Car::Car(Logger *logger)
 {
     _logger = logger;
 
-    _pwmHost = new PwmHost();
-    _wheel = new ServoWheel(_logger, _pwmHost);
-    _engine = new Engine(_logger, _pwmHost);
+    _wheel = new ServoWheel(_logger);
+    _engine = new Engine(_logger);
 
     _lastKeepAliveTime = 0;
     _lastUpdateTime = 0;
@@ -17,17 +16,8 @@ Car::Car(Logger *logger)
     _state = CAR_STATE_ALIVE;
 }
 
-Car::~Car()
-{
-    delete _wheel;
-    delete _engine;
-    delete _pwmHost;
-}
-
 bool Car::setup()
 {
-    _pwmHost->start(20);
-
     _engine->setGas(0);
 
     _wheel->setRotation(0);

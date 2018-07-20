@@ -1,9 +1,12 @@
 #include "Includes.h"
 
-ServoWheel::ServoWheel(Logger *logger, PwmHost *pwmHost)
+ServoWheel::ServoWheel(Logger *logger)
 {
     _logger = logger;
-    _pwm = pwmHost->addPwm(WHEEL_PIN, WHEEL_CENTER_ROTATION_MSEC);
+    _servo.attach(
+        WHEEL_PIN,
+        WHEEL_CENTER_ROTATION_MSEC - WHEEL_MAX_ROTATION_MSEC,
+        WHEEL_CENTER_ROTATION_MSEC + WHEEL_MAX_ROTATION_MSEC);
 }
 
 void ServoWheel::setRotation(float value)
@@ -14,10 +17,5 @@ void ServoWheel::setRotation(float value)
     }
 
     int rotation = WHEEL_CENTER_ROTATION_MSEC - (value * WHEEL_MAX_ROTATION_MSEC);
-
-    // _logger->print("Setting servo wheel rotation at ");
-    // _logger->print(rotation);
-    // _logger->println(" usec");
-
-    _pwm->setWidth(rotation);
+    _servo.write(rotation);
 }

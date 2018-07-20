@@ -2,7 +2,7 @@
 
 //#define DEBUG
 
-const unsigned long CAR_STATE_SEND_PERIOD = 50;
+const unsigned long CAR_STATE_SEND_PERIOD = 100;
 const unsigned long KEEP_ALIVE_TIMEOUT = 500;
 
 const int SERIAL_PIN = D6;
@@ -10,6 +10,7 @@ const long SERIAL_SPEED = 115200;
 
 const int ENGINE_PIN = D3;
 const float ENGINE_NEUTRAL = 1500;
+const float ENGINE_MAX_BACKWARD = 1000;
 const float ENGINE_MAX_FORWARD = 2000;
 const float ENGINE_FORWARD_POWER = 0.3f;
 const float ENGINE_BACKWARD_POWER = 0.2f;

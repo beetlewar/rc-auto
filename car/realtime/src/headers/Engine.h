@@ -6,9 +6,9 @@ class Engine
 {
   private:
     Logger *_logger;
-    Pwm *_pwm;
+    Servo _servo;
 
   public:
-    Engine(Logger *logger, PwmHost *pwmHost);
+    Engine(Logger *logger);
     void setGas(float value);
 };

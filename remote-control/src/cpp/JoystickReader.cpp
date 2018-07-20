@@ -20,8 +20,6 @@ float JoystickReader::read()
 {
     int val = analogRead(_pin);
 
-    //_logger->println(val);
-
     float result = 0;
 
     if (val > _highMid)
@@ -33,6 +31,11 @@ float JoystickReader::read()
         result = (float)(val - _lowMid) / (float)(_lowMid - _low);
     }
 
+    if (result == 0)
+    {
+        return result;
+    }
+
     if (result < -1)
     {
         result = -1;
@@ -42,7 +45,19 @@ float JoystickReader::read()
         result = 1;
     }
 
-    //_logger->println(result);
+    float resultModified = result;
 
-    return result;
+    if (result < 0)
+    {
+        resultModified = -resultModified;
+    }
+
+    resultModified = sqrt(resultModified);
+
+    if (result < 0)
+    {
+        resultModified = -resultModified;
+    }
+
+    return resultModified;
 }

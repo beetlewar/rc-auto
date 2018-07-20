@@ -1,9 +1,9 @@
 #include "Includes.h"
 
-Engine::Engine(Logger *logger, PwmHost *pwmHost)
+Engine::Engine(Logger *logger)
 {
     _logger = logger;
-    _pwm = pwmHost->addPwm(ENGINE_PIN, ENGINE_NEUTRAL);
+    _servo.attach(ENGINE_PIN, ENGINE_MAX_BACKWARD, ENGINE_MAX_FORWARD);
 }
 
 void Engine::setGas(float value)
@@ -25,10 +25,5 @@ void Engine::setGas(float value)
     }
 
     int pulseWidth = ENGINE_NEUTRAL + (ENGINE_MAX_FORWARD - ENGINE_NEUTRAL) * gas;
-
-    // _logger->print("Setting gas at ");
-    // _logger->print(pulseWidth);
-    // _logger->println(" usec");
-
-    _pwm->setWidth(pulseWidth);
+    _servo.write(pulseWidth);
 }

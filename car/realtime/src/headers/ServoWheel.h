@@ -6,9 +6,9 @@ class ServoWheel
 {
   private:
     Logger *_logger;
-    Pwm *_pwm;
+    Servo _servo;
 
   public:
-    ServoWheel(Logger *logger, PwmHost *pwmHost);
+    ServoWheel(Logger *logger);
     void setRotation(float value);
 };

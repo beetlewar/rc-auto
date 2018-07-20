@@ -15,7 +15,6 @@ private:
   Logger *_logger;
   Engine *_engine;
   ServoWheel *_wheel;
-  PwmHost *_pwmHost;
 
   unsigned long _lastKeepAliveTime;
   unsigned long _lastServerTime;
@@ -26,8 +25,6 @@ private:
 
 public:
   Car(Logger *logger);
-
-  ~Car();
 
   bool setup();
 

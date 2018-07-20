@@ -5,13 +5,14 @@ WiFiAccessPoint::WiFiAccessPoint(Logger *logger)
     _logger = logger;
 }
 
-bool WiFiAccessPoint::setup(const char *ssid, const char *password)
+bool WiFiAccessPoint::setup()
 {
-    IPAddress ip(192, 168, 1, 1);
+    IPAddress ip;
+    ip.fromString(WIFI_IP);
     IPAddress mask(255, 255, 255, 0);
 
     WiFi.softAPConfig(ip, ip, mask);
-    bool b = WiFi.softAP(ssid, password, 10);
+    bool b = WiFi.softAP(WIFI_SSID.c_str(), WIFI_PASSWORD.c_str(), WIFI_HOST_CHANNEL);
 
     if (b)
     {

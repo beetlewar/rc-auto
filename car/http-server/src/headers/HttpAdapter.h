@@ -2,20 +2,18 @@
 
 #include "Includes.h"
 
-class WiFiRcHost
+class HttpAdapter
 {
 private:
   ESP8266WebServer _server;
   Logger *_logger;
   FileSystem *_fileSystem;
-  SerialTransmitter *_serialTransmitter;
   StateOwner *_stateOwner;
 
 public:
-  WiFiRcHost(
+  HttpAdapter(
       Logger *logger,
       FileSystem *fileSystem,
-      SerialTransmitter *serialTransmitter,
       StateOwner *stateOwner);
 
   bool setup();

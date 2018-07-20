@@ -1,7 +1,17 @@
 #pragma once
 
-//#define DEBUG
+// #define DEBUG
 
+// const String WIFI_SSID = "beetlewar";
+// const String WIFI_PASSWORD = "beetletong85";
+// const String WIFI_IP = "192.168.1.70";
+
+const String WIFI_SSID = "rc-auto";
+const String WIFI_PASSWORD = "123qwerty";
+const String WIFI_IP = "192.168.1.1";
+const int WIFI_HOST_CHANNEL = 10;
+
+const unsigned long REMOTE_CAR_STATE_SEND_PERIOD = 100;
 const unsigned long CAR_STATE_SEND_PERIOD = 100;
 const unsigned long KEEP_ALIVE_TIMEOUT = 500;
 
@@ -26,7 +36,9 @@ const int JOYSTICK_INPUT_PIN = A0;
 const int JOYSTICK_OUTPUT_X = D5;
 const int JOYSTICK_OUTPUT_Y = D1;
 
-const int WIFI_STATUS_INDICATOR_PIN = D7;
+const int BLINK_INDICATOR_PIN = D7;
 const unsigned long BLINK_ON_TIMEOUT = 100;
 const unsigned long BLINK_OFF_WIFI_FAIL_TIMEOUT = 300;
 const unsigned long BLINK_OFF_WIFI_OK_TIMEOUT = 2000;
+
+const int UDP_PORT = 4444;

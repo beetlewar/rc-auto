@@ -10,5 +10,5 @@ class WiFiAccessPoint
   public:
     WiFiAccessPoint(Logger *logger);
 
-    bool setup(const char *ssid, const char *password);
+    bool setup();
 };

@@ -2,9 +2,12 @@
 
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
+#include <WiFiUdp.h>
 
 #include "..\..\shared\headers\Const.h"
+#include "..\..\shared\headers\Unions.h"
 #include "..\..\shared\headers\Logger.h"
+#include "..\..\shared\headers\RemoteCarStateSerializer.h"
 
 #include "headers\CarState.h"
 #include "headers\RcWiFiClient.h"

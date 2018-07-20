@@ -1,39 +1,37 @@
 #include "Includes.h"
 
-WiFiRcHost::WiFiRcHost(
+HttpAdapter::HttpAdapter(
     Logger *logger,
     FileSystem *fileSystem,
-    SerialTransmitter *serialTransmitter,
     StateOwner *stateOwner)
 {
     _logger = logger;
     _fileSystem = fileSystem;
-    _serialTransmitter = serialTransmitter;
     _stateOwner = stateOwner;
 }
 
-void WiFiRcHost::loop()
+void HttpAdapter::loop()
 {
     _server.handleClient();
 }
 
-bool WiFiRcHost::setup()
+bool HttpAdapter::setup()
 {
     _server.begin();
 
-    _server.on("/", HTTP_GET, std::bind(&WiFiRcHost::handleRoot, this));
-    _server.on("/images/background.jpg", std::bind(&WiFiRcHost::handleBackgroundImage, this));
-    _server.on("/images/gas.png", std::bind(&WiFiRcHost::handleGasImage, this));
-    _server.on("/images/wheel.png", std::bind(&WiFiRcHost::handleWheelImage, this));
-    _server.on("/app.js", HTTP_GET, std::bind(&WiFiRcHost::handleAppScript, this));
-    _server.on("/api/state", HTTP_POST, std::bind(&WiFiRcHost::handleState, this));
+    _server.on("/", HTTP_GET, std::bind(&HttpAdapter::handleRoot, this));
+    _server.on("/images/background.jpg", std::bind(&HttpAdapter::handleBackgroundImage, this));
+    _server.on("/images/gas.png", std::bind(&HttpAdapter::handleGasImage, this));
+    _server.on("/images/wheel.png", std::bind(&HttpAdapter::handleWheelImage, this));
+    _server.on("/app.js", HTTP_GET, std::bind(&HttpAdapter::handleAppScript, this));
+    _server.on("/api/state", HTTP_POST, std::bind(&HttpAdapter::handleState, this));
 
     _logger->println("Http server started at port 80.");
 
     return true;
 }
 
-void WiFiRcHost::handleRoot()
+void HttpAdapter::handleRoot()
 {
     _logger->println("Handling Index.html.");
 
@@ -42,22 +40,22 @@ void WiFiRcHost::handleRoot()
     _server.send(200, "text/html", content);
 }
 
-void WiFiRcHost::handleBackgroundImage()
+void HttpAdapter::handleBackgroundImage()
 {
     sendFile("/images/background.jpg", "image/jpeg");
 }
 
-void WiFiRcHost::handleGasImage()
+void HttpAdapter::handleGasImage()
 {
     sendFile("/images/gas.png", "image/png");
 }
 
-void WiFiRcHost::handleWheelImage()
+void HttpAdapter::handleWheelImage()
 {
     sendFile("/images/wheel.png", "image/png");
 }
 
-void WiFiRcHost::handleAppScript()
+void HttpAdapter::handleAppScript()
 {
     _logger->println("Handling app script.");
 
@@ -66,7 +64,7 @@ void WiFiRcHost::handleAppScript()
     _server.send(200, "application/javascript", content);
 }
 
-void WiFiRcHost::handleState()
+void HttpAdapter::handleState()
 {
     String gasString = _server.arg("gas");
     float gas = gasString.toFloat();
@@ -84,7 +82,7 @@ void WiFiRcHost::handleState()
     _server.send(200);
 }
 
-void WiFiRcHost::sendFile(String path, String contentType)
+void HttpAdapter::sendFile(String path, String contentType)
 {
     _logger->print("Handling file ");
     _logger->println(path);
@@ -96,7 +94,7 @@ void WiFiRcHost::sendFile(String path, String contentType)
     file.close();
 }
 
-String WiFiRcHost::readFileAsString(String path)
+String HttpAdapter::readFileAsString(String path)
 {
     File file = _fileSystem->openRead(path);
 

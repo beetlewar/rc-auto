@@ -10,6 +10,7 @@
 #include "..\..\..\shared\headers\Const.h"
 #include "..\..\..\shared\headers\Unions.h"
 #include "..\..\..\shared\headers\SerialSerializer.h"
+#include "..\..\..\shared\headers\RemoteCarStateSerializer.h"
 #include "..\..\..\shared\headers\Logger.h"
 
 #include "headers\CarState.h"
@@ -18,4 +19,5 @@
 #include "headers\MessageDispatcher.h"
 #include "headers\FileSystem.h"
 #include "headers\WiFiAccessPoint.h"
-#include "headers\WiFiRcHost.h"
+#include "headers\HttpAdapter.h"
+#include "headers\UdpAdapter.h"

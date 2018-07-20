@@ -7,11 +7,12 @@ bool initialized = false;
 Logger *logger = NULL;
 FileSystem *fileSystem = NULL;
 WiFiAccessPoint *accessPoint = NULL;
-WiFiRcHost *rcHost = NULL;
 SerialTransmitter *transmitter = NULL;
 StateOwner *stateOwner = NULL;
 MessageDispatcher *messageDispatcher = NULL;
 SerialSerializer *serializer = NULL;
+HttpAdapter *httpAdapter = NULL;
+UdpAdapter *udpAdapter = NULL;
 
 void setup()
 {
@@ -22,15 +23,17 @@ void setup()
     fileSystem = new FileSystem(logger);
     accessPoint = new WiFiAccessPoint(logger);
     transmitter = new SerialTransmitter(logger);
-    rcHost = new WiFiRcHost(logger, fileSystem, transmitter, stateOwner);
     messageDispatcher = new MessageDispatcher(logger, stateOwner, transmitter, serializer);
+    httpAdapter = new HttpAdapter(logger, fileSystem, stateOwner);
+    udpAdapter = new UdpAdapter(logger, stateOwner);
 
     initialized =
         logger->setup(9600) &&
         fileSystem->setup() &&
-        accessPoint->setup("rc-auto", "123qwerty") &&
+        accessPoint->setup() &&
         transmitter->setup() &&
-        rcHost->setup();
+        httpAdapter->setup() &&
+        udpAdapter->setup();
 
     if (initialized)
     {
@@ -49,7 +52,8 @@ void loop()
         return;
     }
 
-    rcHost->loop();
+    httpAdapter->loop();
+    udpAdapter->loop();
     messageDispatcher->loop();
 
     delay(1);

@@ -12,7 +12,7 @@ SystemIndicator::SystemIndicator(
 
 void SystemIndicator::setup()
 {
-    pinMode(WIFI_STATUS_INDICATOR_PIN, OUTPUT);
+    pinMode(BLINK_INDICATOR_PIN, OUTPUT);
 }
 
 void SystemIndicator::loop()
@@ -54,10 +54,10 @@ void SystemIndicator::updateIndicator()
     switch (_blinkState)
     {
     case BLINK_ON:
-        analogWrite(WIFI_STATUS_INDICATOR_PIN, 255);
+        analogWrite(BLINK_INDICATOR_PIN, 255);
         break;
     case BLINK_OFF:
-        analogWrite(WIFI_STATUS_INDICATOR_PIN, 0);
+        analogWrite(BLINK_INDICATOR_PIN, 0);
         break;
     }
 }

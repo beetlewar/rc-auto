@@ -8,15 +8,19 @@ private:
   Logger *_logger;
   Car *_car;
   RcWiFiClient *_client;
-  float _sentGas;
-  float _sentWheel;
-  unsigned long _lastKeepAliveTime;
+  RemoteCarStateSerializer _serializer;
+
+  WiFiUDP _udp;
+  IPAddress _ip;
+  unsigned long _lastSendTime;
 
 public:
   CarStateSender(
       Logger *logger,
       Car *car,
       RcWiFiClient *client);
+
+  void setup();
 
   void loop();
 

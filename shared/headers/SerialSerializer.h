@@ -1,50 +1,30 @@
 #pragma once
 
-struct CarStateMessage
-{
-    unsigned long ServerTime;
-    unsigned long KeepAliveTime;
-    float Gas;
-    float Wheel;
-
-    CarStateMessage(
-        unsigned long serverTime,
-        unsigned long keepAliveTime,
-        float gas,
-        float wheel)
-    {
-        ServerTime = serverTime;
-        KeepAliveTime = keepAliveTime;
-        Gas = gas;
-        Wheel = wheel;
-    }
-};
-
 class SerialSerializer
 {
   public:
-    unsigned long serialize(CarStateMessage message, uint8_t *destination)
+    unsigned long serialize(const CarStateMessage *message, uint8_t *destination)
     {
         binaryULong unionServerTime;
-        unionServerTime.value = message.ServerTime;
+        unionServerTime.value = message->ServerTime;
 
         memcpy(destination, unionServerTime.binary, sizeof(unionServerTime));
         destination += sizeof(unionServerTime);
 
         binaryULong keepAliveTime;
-        keepAliveTime.value = message.KeepAliveTime;
+        keepAliveTime.value = message->KeepAliveTime;
 
         memcpy(destination, keepAliveTime.binary, sizeof(keepAliveTime));
         destination += sizeof(keepAliveTime);
 
         binaryFloat gas;
-        gas.value = message.Gas;
+        gas.value = message->Gas;
 
         memcpy(destination, gas.binary, sizeof(gas));
         destination += sizeof(gas);
 
         binaryFloat wheel;
-        wheel.value = message.Wheel;
+        wheel.value = message->Wheel;
 
         memcpy(destination, wheel.binary, sizeof(wheel));
         destination += sizeof(wheel);

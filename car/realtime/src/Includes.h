@@ -6,6 +6,7 @@
 
 #include "..\..\..\shared\headers\Const.h"
 #include "..\..\..\shared\headers\Unions.h"
+#include "..\..\..\shared\headers\CarStateMessage.h"
 #include "..\..\..\shared\headers\SerialSerializer.h"
 #include "..\..\..\shared\headers\Logger.h"
 

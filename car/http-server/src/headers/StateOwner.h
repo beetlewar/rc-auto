@@ -8,7 +8,7 @@ class StateOwner
     CarState _carState;
 
   public:
-    StateOwner() : _carState(0, 0, 0)
+    StateOwner() : _carState(RemoteCarState(0, 0), 0)
     {
     }
 

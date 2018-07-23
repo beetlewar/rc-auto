@@ -72,12 +72,12 @@ void HttpAdapter::handleState()
     String wheelString = _server.arg("wheel");
     float wheel = wheelString.toFloat();
 
-    CarState state(gas, wheel, millis());
+    CarState state(RemoteCarState(gas, wheel), millis());
 
     _stateOwner->setCarState(state);
 
     _logger->println("State handled.");
-    _logger->println("gas: " + String(gas) + ", wheel: " + String(wheel) + ", at: " + String(state.keepAliveTime()));
+    _logger->println("gas: " + String(gas) + ", wheel: " + String(wheel) + ", at: " + String(state.KeepAliveTime));
 
     _server.send(200);
 }

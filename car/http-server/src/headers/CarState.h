@@ -1,39 +1,19 @@
 #pragma once
 
-class CarState
+struct CarState
 {
-  private:
-    float _gas;
-    float _wheel;
-    unsigned long _keepAliveTime;
+    RemoteCarState State;
+    unsigned long KeepAliveTime;
 
-  public:
-    CarState(float gas, float wheel, unsigned long keepAliveTime)
+    CarState(RemoteCarState state, unsigned long keepAliveTime)
     {
-        _gas = gas;
-        _wheel = wheel;
-        _keepAliveTime = keepAliveTime;
+        State = state;
+        KeepAliveTime = keepAliveTime;
     }
 
     CarState(const CarState &state)
     {
-        _gas = state._gas;
-        _wheel = state._wheel;
-        _keepAliveTime = state._keepAliveTime;
-    }
-
-    float gas()
-    {
-        return _gas;
-    }
-
-    float wheel()
-    {
-        return _wheel;
-    }
-
-    unsigned long keepAliveTime()
-    {
-        return _keepAliveTime;
+        State = state.State;
+        KeepAliveTime = state.KeepAliveTime;
     }
 };

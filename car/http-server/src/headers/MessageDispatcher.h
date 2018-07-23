@@ -10,7 +10,7 @@ private:
   SerialTransmitter *_serialTransmitter;
   SerialSerializer *_serializer;
   unsigned long _lastSendTime;
-  uint8_t *_serialBuffer;
+  RemoteCarState _sentCarState;
 
 public:
   MessageDispatcher(
@@ -20,4 +20,8 @@ public:
       SerialSerializer *serializer);
 
   void loop();
+
+  private:
+  bool shouldSendState(const RemoteCarState *carState, unsigned long time);
+  void sendState(const CarState *carState, unsigned long time);
 };

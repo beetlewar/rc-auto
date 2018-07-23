@@ -35,5 +35,5 @@ void UdpAdapter::loop()
 
     RemoteCarState remoteCarState = _serializer.deserialize(buffer);
 
-    _stateOwner->setCarState(CarState(remoteCarState.Gas, remoteCarState.Wheel, millis()));
+    _stateOwner->setCarState(CarState(remoteCarState, millis()));
 }

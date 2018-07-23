@@ -9,6 +9,7 @@ private:
   Car *_car;
   RcWiFiClient *_client;
   RemoteCarStateSerializer _serializer;
+  RemoteCarState _sentCarState;
 
   WiFiUDP _udp;
   IPAddress _ip;
@@ -25,5 +26,6 @@ public:
   void loop();
 
 private:
-  void sendState();
+  bool shouldSendState(const RemoteCarState *carState, unsigned long time);
+  void sendState(const RemoteCarState *carState, unsigned long time);
 };

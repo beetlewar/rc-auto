@@ -7,9 +7,9 @@
 #include "..\..\shared\headers\Const.h"
 #include "..\..\shared\headers\Unions.h"
 #include "..\..\shared\headers\Logger.h"
+#include "..\..\shared\headers\RemoteCarState.h"
 #include "..\..\shared\headers\RemoteCarStateSerializer.h"
 
-#include "headers\CarState.h"
 #include "headers\RcWiFiClient.h"
 #include "headers\JoystickReader.h"
 #include "headers\Car.h"

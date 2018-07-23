@@ -25,24 +25,39 @@ void CarStateSender::loop()
         return;
     }
 
-    sendState();
+    const RemoteCarState carState(_car->gas(), _car->wheel());
+    unsigned long time = millis();
+    if (shouldSendState(&carState, time))
+    {
+        sendState(&carState, time);
+    }
 }
 
-void CarStateSender::sendState()
+bool CarStateSender::shouldSendState(const RemoteCarState *carState, unsigned long time)
 {
-    unsigned long time = millis();
     unsigned long elapsed = time - _lastSendTime;
 
-    if (elapsed < REMOTE_CAR_STATE_SEND_PERIOD)
+    if (elapsed >= CAR_STATE_SYNC_PERIOD)
     {
-        return;
+        _logger->println("Should sync state");
+        return true;
     }
 
+    if (elapsed >= CAR_STATE_SEND_PERIOD &&
+        _sentCarState.StateChanged(carState))
+    {
+        _logger->println("Should send state. Was: " + String(_sentCarState.Gas) + ", " + String(_sentCarState.Wheel) + ". Now: " + String(carState->Gas) + ", " + String(carState->Wheel));
+        return true;
+    }
+
+    return false;
+}
+
+void CarStateSender::sendState(const RemoteCarState *carState, unsigned long time)
+{
     _logger->println("Sending car state");
 
     _udp.beginPacket(_ip, UDP_PORT);
-
-    RemoteCarState carState(_car->gas(), _car->wheel());
 
     uint8_t buf[sizeof(RemoteCarState)];
     unsigned long size = _serializer.serialize(carState, buf);
@@ -51,5 +66,6 @@ void CarStateSender::sendState()
 
     _udp.endPacket();
 
+    _sentCarState = *carState;
     _lastSendTime = time;
 }

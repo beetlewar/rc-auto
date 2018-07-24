@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/custom_styles/slider.css">
+    <link rel="stylesheet" href="/bootstrap/bootstrap.min.css">
+    <script src="/bootstrap/jquery-3.3.1.min.js"></script>
+    <script src="/bootstrap/popper.min.js"></script>
+    <script src="/bootstrap/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <form>
+        <div class="form-group">
+            <label for="engineForwardPower">Engine forward power</label>
+            <input type="range" min="0" max="100" value="40" class="slider" id="engineForwardPower" name="engineForwardPower">
+        </div>
+        <div class="form-group">
+            <label for="engineBackwardPower">Engine backward power</label>
+            <input type="range" min="0" max="100" value="20" class="slider" id="engineBackwardPower" name="engineBackwardPower">
+        </div>
+        <button type="submit" class="btn btn-primary" name="submit" value="apply" id="applyButton">Apply</button>
+        <button type="submit" class="btn btn-primary" name="submit" value="reset" id="resetButton">Reset</button>
+    </form>
+
+    <script>
+        $("#applyButton").click(function (event) {
+            event.preventDefault();
+            $.post(
+                "/api/settings/apply",
+                $("form").serialize());
+        });
+        $("#resetButton").click(function (event) {
+            event.preventDefault();
+            $.post(
+                "/api/settings/reset");
+        });
+    </script>
+</body>
+
+</html>

@@ -1,8 +1,8 @@
 const FULL_GAS_TOUCH_MOVE = 100;
 
 module.exports = class Gas {
-    init(apiClient) {
-        this.apiClient = apiClient;
+    init(carState) {
+        this.carState = carState;
         this.dragY = 0;
         this.gasPressed = false;
         this.gasValue = 0;
@@ -109,9 +109,7 @@ module.exports = class Gas {
 
         this.gasValue = Math.max(-1, Math.min(1.0, this.gasValue + dGas));
 
-        //this.gasValue = Math.round(this.gasValue * 100) / 100;
-
-        this.apiClient.sendGas(this.gasValue);
+        this.carState.setGas(this.gasValue);
 
         this.updateGasTable();
 
@@ -124,7 +122,7 @@ module.exports = class Gas {
         this.gasPressed = false;
         this.gasValue = 0;
 
-        this.apiClient.sendGas(this.gasValue);
+        this.carState.setGas(this.gasValue);
         
         this.showGas(false);
         this.updateGasTable();

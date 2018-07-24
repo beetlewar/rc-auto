@@ -1,13 +1,11 @@
-const ApiClient = require("./apiClient");
-
 // максимальный угол поворота руля
 const MAX_ROTATION_ANGLE = 90;
 // скорость возврата руля в нейтральное положение, градусов в секунду
 const RETURN_ROTATION_TO_ZERO_SPEED = 180;
 
 module.exports = class Wheel {
-    init(apiClient) {
-        this.apiClient = apiClient;
+    init(carState) {
+        this.carState = carState;
         this.pressed = false;
         this.dragAngle = 0;
         this.wheelRotationAngle = 0;
@@ -37,6 +35,8 @@ module.exports = class Wheel {
         this.dragAngle = angle;
 
         e.preventDefault();
+
+        return false;
     }
 
     findWheelTouch(touches) {
@@ -90,7 +90,7 @@ module.exports = class Wheel {
         var angle = this.getWheelAngle(touch.clientX, touch.clientY);
 
         if (angle == NaN) {
-            return;
+            return false;
         }
 
         var a1 = angle - this.dragAngle;
@@ -108,6 +108,8 @@ module.exports = class Wheel {
         }
 
         this.dragAngle = angle;
+
+        return false;
     }
 
     rotateWheel(angle) {
@@ -116,14 +118,15 @@ module.exports = class Wheel {
 
         var wheelValue = this.wheelRotationAngle / MAX_ROTATION_ANGLE;
 
-        // wheelValue = Math.round(wheelValue * 100) / 100;
-
-        this.apiClient.sendWheel(wheelValue);
+        this.carState.setWheel(wheelValue);
     }
 
-    ontouchend() {
+    ontouchend(e) {
         this.pressed = false;
         this.animateReturnToZero(Date.now());
+
+        e.preventDefault();
+        return false;
     }
 
     animateReturnToZero(prevTimeStamp) {

@@ -1,25 +1,23 @@
-const HttpClientMetrics = require("./httpClientMetrics");
 const HttpClient = require("./httpClient");
-const ApiClient = require("./apiClient");
 const Gas = require("./gas");
 const Wheel = require("./wheel");
-const KeepAlive = require("./keepAlive");
 const WindowHandler = require("./windowHandler");
+const CarState = require("./carState");
+const CarStateSender = require("./carStateSender");
 
 window.onload = () => {
     let httpClient = new HttpClient();
+    let carState = new CarState();
+    let carStateSender = new CarStateSender();
+    let gas = new Gas();
+    let wheel = new Wheel()
+    let windowHandler = new WindowHandler();
 
-    let apiClient = new ApiClient();
-    apiClient.init(httpClient);
+    windowHandler.init();
+    carState.init();
+    gas.init(carState);
+    wheel.init(carState);
+    carStateSender.init(httpClient, carState);
 
-    // let httpClientMetrics = new HttpClientMetrics();
-    // httpClientMetrics.init(httpClient);
-
-    // let apiClient = new ApiClient();
-    // apiClient.init(httpClientMetrics);
-
-    new WindowHandler().init();
-    new KeepAlive().init(apiClient);
-    new Gas().init(apiClient);
-    new Wheel().init(apiClient);
+    carStateSender.start();
 }

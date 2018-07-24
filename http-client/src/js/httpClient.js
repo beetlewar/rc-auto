@@ -1,6 +1,6 @@
 module.exports = class HttpClient {
-    putAsync(uri, content, onDone) {
-        console.debug("PUT: " + uri + ", content: " + content);
+    post(uri, content, onDone) {
+        console.debug("POST: " + uri + ", content: " + content);
 
         var request = new XMLHttpRequest();
         request.onreadystatechange = () => {
@@ -9,7 +9,7 @@ module.exports = class HttpClient {
             }
         }
 
-        request.open("PUT", uri, true);
+        request.open("POST", uri, true);
         request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         request.withCredentials = true;
         request.send(content);

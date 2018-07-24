@@ -22,8 +22,11 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(buildPath),
         new CopyWebpackPlugin([
+            { from: "src/Index.html" },
+            { from: "src/Admin.html" },
             { from: "src/images", to: "images" },
-            { from: "src/Index.html" }
+            { from: "src/bootstrap", to: "bootstrap" },
+            { from: "src/custom_styles", to: "custom_styles" }
         ])
     ]
 };

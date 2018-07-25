@@ -25,17 +25,76 @@
         <button type="submit" class="btn btn-primary" name="submit" value="reset" id="resetButton">Reset</button>
     </form>
 
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Loading...
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        function applyState(data) {
+            console.log(data);
+            $("#engineForwardPower").val(data["engineForwardPower"]);
+            $("#engineBackwardPower").val(data["engineBackwardPower"]);
+        };
+
+        function beginAsync(asyncAction) {
+            $('#exampleModal')
+                .one('shown.bs.modal', () => {
+                    console.log("begin async")
+                    asyncAction(Date.now());
+                })
+                .modal('show');
+        };
+
+        function endAsync(apply, beginAsyncTime) {
+            const modalTimeout = 1000;
+            elapsed = Date.now() - beginAsyncTime;
+            waitForModal = modalTimeout - elapsed;
+
+            setTimeout(() =>
+                $('#exampleModal')
+                    .one('hidden.bs.modal', () => {
+                        console.log("end async");
+                        apply();
+                    })
+                    .modal('hide'),
+                waitForModal);
+        }
+
+        $(document).ready(function () {
+            console.log("requesting state on load");
+
+            beginAsync(time =>
+                $.get(
+                    "/api/settings",
+                    data => endAsync(() => applyState(data), time)))
+        });
+
         $("#applyButton").click(function (event) {
             event.preventDefault();
-            $.post(
-                "/api/settings/apply",
-                $("form").serialize());
+            console.log("applying state");
+
+            beginAsync(time =>
+                $.post(
+                    "/api/settings",
+                    $("form").serialize(),
+                    data => endAsync(() => { }, time)))
         });
+
         $("#resetButton").click(function (event) {
             event.preventDefault();
-            $.post(
-                "/api/settings/reset");
+            console.log("resetting state");
+
+            beginAsync(time =>
+                $.post(
+                    "/api/settings/reset",
+                    $("form").serialize(),
+                    data => endAsync(() => applyState(data), time)))
         });
     </script>
 </body>

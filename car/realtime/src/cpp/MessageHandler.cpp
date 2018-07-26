@@ -14,6 +14,12 @@ void MessageHandler::handle(uint8_t *message)
 {
     CarStateMessage carStateMessage = _serializer->deserialize(message);
 
+    _logger->println(
+        String(carStateMessage.KeepAliveTime) +
+        ", " + String(carStateMessage.ServerTime) +
+        ", " + String(carStateMessage.Gas) +
+        ", " + String(carStateMessage.Wheel));
+
     _car->setState(
         carStateMessage.KeepAliveTime,
         carStateMessage.ServerTime,

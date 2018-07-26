@@ -19,12 +19,23 @@ bool HttpAdapter::setup()
 {
     _server.begin();
 
+    // html
     _server.on("/", HTTP_GET, std::bind(&HttpAdapter::handleRoot, this));
+    _server.on("/admin", std::bind(&HttpAdapter::handleAdminPage, this));
+
+    // api
+    _server.on("/api/state", HTTP_POST, std::bind(&HttpAdapter::handleState, this));
+
+    // static
+    _server.on("/app.js", HTTP_GET, std::bind(&HttpAdapter::handleAppScript, this));
     _server.on("/images/background.jpg", std::bind(&HttpAdapter::handleBackgroundImage, this));
     _server.on("/images/gas.png", std::bind(&HttpAdapter::handleGasImage, this));
     _server.on("/images/wheel.png", std::bind(&HttpAdapter::handleWheelImage, this));
-    _server.on("/app.js", HTTP_GET, std::bind(&HttpAdapter::handleAppScript, this));
-    _server.on("/api/state", HTTP_POST, std::bind(&HttpAdapter::handleState, this));
+    _server.on("/bootstrap/bootstrap.min.css", std::bind(&HttpAdapter::handleBootstrapMinCss, this));
+    _server.on("/bootstrap/bootstrap.min.js", std::bind(&HttpAdapter::handleBootstrapMinJs, this));
+    _server.on("/bootstrap/jquery-3.3.1.min.js", std::bind(&HttpAdapter::handleJQuery, this));
+    _server.on("/bootstrap/popper.min.js", std::bind(&HttpAdapter::handlePopper, this));
+    _server.on("/custom_styles/slider.css", std::bind(&HttpAdapter::handleSliderCss, this));
 
     _logger->println("Http server started at port 80.");
 
@@ -33,11 +44,7 @@ bool HttpAdapter::setup()
 
 void HttpAdapter::handleRoot()
 {
-    _logger->println("Handling Index.html.");
-
-    String content = readFileAsString("/Index.html");
-
-    _server.send(200, "text/html", content);
+    sendFile("/Index.html", "text/html");
 }
 
 void HttpAdapter::handleBackgroundImage()
@@ -57,11 +64,37 @@ void HttpAdapter::handleWheelImage()
 
 void HttpAdapter::handleAppScript()
 {
-    _logger->println("Handling app script.");
+    sendFile("/app.js", "application/javascript");
+}
 
-    String content = readFileAsString("/app.js");
+void HttpAdapter::handleAdminPage()
+{
+    sendFile("/Admin.html", "text/html");
+}
 
-    _server.send(200, "application/javascript", content);
+void HttpAdapter::handleBootstrapMinCss()
+{
+    sendFile("/bootstrap/bootstrap.min.css", "text/css");
+}
+
+void HttpAdapter::handleBootstrapMinJs()
+{
+    sendFile("/bootstrap/bootstrap.min.js", "application/javascript");
+}
+
+void HttpAdapter::handleJQuery()
+{
+    sendFile("/bootstrap/jquery-3.3.1.min.js", "application/javascript");
+}
+
+void HttpAdapter::handlePopper()
+{
+    sendFile("/bootstrap/popper.min.js", "application/javascript");
+}
+
+void HttpAdapter::handleSliderCss()
+{
+    sendFile("/custom_styles/slider.css", "text/css");
 }
 
 void HttpAdapter::handleState()
@@ -92,15 +125,4 @@ void HttpAdapter::sendFile(String path, String contentType)
     _server.streamFile(file, contentType);
 
     file.close();
-}
-
-String HttpAdapter::readFileAsString(String path)
-{
-    File file = _fileSystem->openRead(path);
-
-    String result = file.readStringUntil('\0');
-
-    file.close();
-
-    return result;
 }

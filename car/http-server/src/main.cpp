@@ -1,7 +1,5 @@
 #include "Includes.h"
 
-#ifndef UNIT_TEST
-
 bool initialized = false;
 
 Logger *logger = NULL;
@@ -58,5 +56,3 @@ void loop()
 
     delay(1);
 }
-
-#endif

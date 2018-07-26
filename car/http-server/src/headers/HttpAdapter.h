@@ -31,6 +31,18 @@ private:
 
   void handleAppScript();
 
+  void handleAdminPage();
+
+  void handleBootstrapMinCss();
+
+  void handleBootstrapMinJs();
+
+  void handleJQuery();
+
+  void handlePopper();
+
+  void handleSliderCss();
+
   void handleState();
 
   void sendFile(String path, String contentType);

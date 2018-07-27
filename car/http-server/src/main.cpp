@@ -41,6 +41,8 @@ void setup()
     {
         logger->println("Initialization failed.");
     }
+
+    delay(1000);
 }
 
 void loop()

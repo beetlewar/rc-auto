@@ -4,51 +4,51 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="/custom_styles/slider.css">
-    <link rel="stylesheet" href="/bootstrap/bootstrap.min.css">
-    <script src="/bootstrap/jquery-3.3.1.min.js"></script>
-    <script src="/bootstrap/popper.min.js"></script>
-    <script src="/bootstrap/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/styles/custom.css">
+    <script src="/external_js/jquery-3.3.1.min.js"></script>
 </head>
 
 <body>
-    <form>
-        <div class="form-group">
-            <label for="engineForwardPower">Engine forward power</label>
-            <input type="range" min="0" max="100" value="40" class="slider" id="engineForwardPower" name="engineForwardPower">
-        </div>
-        <div class="form-group">
-            <label for="engineBackwardPower">Engine backward power</label>
-            <input type="range" min="0" max="100" value="20" class="slider" id="engineBackwardPower" name="engineBackwardPower">
-        </div>
-        <button type="submit" class="btn btn-primary" name="submit" value="apply" id="applyButton">Apply</button>
-        <button type="submit" class="btn btn-primary" name="submit" value="reset" id="resetButton">Reset</button>
-    </form>
-
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    Loading...
-                </div>
-            </div>
+    <div id="fading" class="fading">
+        <div id="loading" class="loader">
         </div>
     </div>
 
+    <form class="form-content">
+        <div>
+            <div>
+                <label for="engineForwardPower">Engine forward power</label>
+                <input type="range" min="0" max="1" value="0.5" step="0.1" class="slider" id="engineForwardPower" name="engineForwardPower">
+            </div>
+            <div>
+                <label for="engineBackwardPower">Engine backward power</label>
+                <input type="range" min="0" max="1" value="0.2" step="0.1" class="slider" id="engineBackwardPower" name="engineBackwardPower">
+            </div>
+            <div>
+                <label for="engineAcceleration">Acceleration</label>
+                <input type="range" min="0" max="1" value="0.4" step="0.1" class="slider" id="engineAcceleration" name="engineAcceleration">
+            </div>
+            <div class="button-group">
+                <button type="submit" class="button" name="submit" value="reset" id="resetButton">Reset</button>
+                <button type="submit" class="button" name="submit" value="apply" id="applyButton">Apply</button>
+            </div>
+        </div>
+    </form>
+
     <script>
+        $("#loading").height($("#loading").width());
+
         function applyState(data) {
             console.log(data);
             $("#engineForwardPower").val(data["engineForwardPower"]);
             $("#engineBackwardPower").val(data["engineBackwardPower"]);
+            $("#engineAcceleration").val(data["engineAcceleration"]);
         };
 
         function beginAsync(asyncAction) {
-            $('#exampleModal')
-                .one('shown.bs.modal', () => {
-                    console.log("begin async")
-                    asyncAction(Date.now());
-                })
-                .modal('show');
+            $("#fading").css("visibility", "visible");
+            console.log("begin async")
+            asyncAction(Date.now());
         };
 
         function endAsync(apply, beginAsyncTime) {
@@ -56,13 +56,11 @@
             elapsed = Date.now() - beginAsyncTime;
             waitForModal = modalTimeout - elapsed;
 
-            setTimeout(() =>
-                $('#exampleModal')
-                    .one('hidden.bs.modal', () => {
-                        console.log("end async");
-                        apply();
-                    })
-                    .modal('hide'),
+            setTimeout(() => {
+                console.log("end async");
+                apply();
+                $("#fading").css("visibility", "hidden");
+            },
                 waitForModal);
         }
 
@@ -70,9 +68,9 @@
             console.log("requesting state on load");
 
             beginAsync(time =>
-                $.get(
-                    "/api/settings",
-                    data => endAsync(() => applyState(data), time)))
+                $.get("/api/settings")
+                    .done(data => applyState(data))
+                    .always(() => endAsync(() => { }, time)));
         });
 
         $("#applyButton").click(function (event) {
@@ -80,10 +78,8 @@
             console.log("applying state");
 
             beginAsync(time =>
-                $.post(
-                    "/api/settings",
-                    $("form").serialize(),
-                    data => endAsync(() => { }, time)))
+                $.post("/api/settings", $("form").serialize())
+                    .always(endAsync(() => { }, time)));
         });
 
         $("#resetButton").click(function (event) {
@@ -91,10 +87,9 @@
             console.log("resetting state");
 
             beginAsync(time =>
-                $.post(
-                    "/api/settings/reset",
-                    $("form").serialize(),
-                    data => endAsync(() => applyState(data), time)))
+                $.post("/api/settings/reset", $("form").serialize())
+                    .done(data => applyState(data))
+                    .always(() => endAsync(() => { }, time)));
         });
     </script>
 </body>

@@ -41,7 +41,7 @@ void UdpAdapter::loop()
     _udp.readBytes(buffer, expectedPacketSize);
 
     RemoteCarState remoteCarState = _serializer.deserialize(buffer);
-    _logger->println(String(remoteCarState.Gas) + ", " + String(remoteCarState.Wheel));
+    //_logger->println(String(remoteCarState.Gas) + ", " + String(remoteCarState.Wheel));
 
     _stateOwner->setCarState(CarState(remoteCarState, millis()));
 }

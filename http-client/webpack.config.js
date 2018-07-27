@@ -25,8 +25,8 @@ module.exports = {
             { from: "src/Index.html" },
             { from: "src/Admin.html" },
             { from: "src/images", to: "images" },
-            { from: "src/bootstrap", to: "bootstrap" },
-            { from: "src/custom_styles", to: "custom_styles" }
+            { from: "src/styles", to: "styles" },
+            { from: "src/external_js", to: "external_js" }
         ])
     ]
 };

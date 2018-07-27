@@ -4,7 +4,7 @@ var connect = require('connect');
 var serveStatic = require('serve-static');
 var bodyParser = require('body-parser');
 
-defaultState = { engineForwardPower: "40", engineBackwardPower: "10" };
+defaultState = { engineForwardPower: "0.5", engineBackwardPower: "0.2", engineAcceleration: "0.4" };
 state = {};
 
 Object.assign(state, defaultState);

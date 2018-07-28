@@ -8,21 +8,23 @@ WiFiAccessPoint *accessPoint = NULL;
 SerialTransmitter *transmitter = NULL;
 StateOwner *stateOwner = NULL;
 MessageDispatcher *messageDispatcher = NULL;
-SerialSerializer *serializer = NULL;
+SerialSerializer *serialSerializer = NULL;
 HttpAdapter *httpAdapter = NULL;
 UdpAdapter *udpAdapter = NULL;
+CarSettingsJsonSerializer *settingsSerializer = NULL;
 
 void setup()
 {
     logger = new Logger();
 
-    serializer = new SerialSerializer();
+    serialSerializer = new SerialSerializer();
+    settingsSerializer = new CarSettingsJsonSerializer(logger);
     stateOwner = new StateOwner();
     fileSystem = new FileSystem(logger);
     accessPoint = new WiFiAccessPoint(logger);
     transmitter = new SerialTransmitter(logger);
-    messageDispatcher = new MessageDispatcher(logger, stateOwner, transmitter, serializer);
-    httpAdapter = new HttpAdapter(logger, fileSystem, stateOwner);
+    messageDispatcher = new MessageDispatcher(logger, stateOwner, transmitter, serialSerializer);
+    httpAdapter = new HttpAdapter(logger, fileSystem, stateOwner, settingsSerializer);
     udpAdapter = new UdpAdapter(logger, stateOwner);
 
     initialized =

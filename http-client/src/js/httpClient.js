@@ -10,7 +10,7 @@ module.exports = class HttpClient {
         }
 
         request.open("POST", uri, true);
-        request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        request.setRequestHeader("Content-Type", "application/json");
         request.withCredentials = true;
         request.send(content);
     }

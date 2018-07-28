@@ -8,8 +8,15 @@ module.exports = class CarStateSender {
         setTimeout(
             () => {
                 let me = this;
-                let content = "gas=" + this.carState.getGas() + "&wheel=" + this.carState.getWheel();
-                this.httpClient.post("/api/state", content, () => me.start());
+
+                let obj = {
+                    gas: this.carState.getGas(),
+                    wheel: this.carState.getWheel(),
+                };
+
+                let json = JSON.stringify(obj);
+
+                this.httpClient.post("/api/state", json, () => me.start());
             }, 100);
     }
 }

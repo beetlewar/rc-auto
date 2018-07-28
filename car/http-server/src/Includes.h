@@ -6,6 +6,7 @@
 #include "WiFiUdp.h"
 #include "FS.h"
 #include "SoftwareSerial.h"
+#include "ArduinoJson.h"
 
 #include "..\..\..\shared\headers\Const.h"
 #include "..\..\..\shared\headers\Unions.h"
@@ -16,6 +17,8 @@
 #include "..\..\..\shared\headers\Logger.h"
 
 #include "headers\CarState.h"
+#include "headers\CarSettings.h"
+#include "headers\CarSettingsJsonSerializer.h"
 #include "headers\StateOwner.h"
 #include "headers\SerialTransmitter.h"
 #include "headers\MessageDispatcher.h"

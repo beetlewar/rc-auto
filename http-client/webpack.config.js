@@ -26,7 +26,7 @@ module.exports = {
             { from: "src/Admin.html" },
             { from: "src/images", to: "images" },
             { from: "src/styles", to: "styles" },
-            { from: "src/external_js", to: "external_js" }
+            { from: "src/externaljs", to: "externaljs" }
         ])
     ]
 };

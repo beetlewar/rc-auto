@@ -9,12 +9,14 @@ private:
   Logger *_logger;
   FileSystem *_fileSystem;
   StateOwner *_stateOwner;
+  CarSettingsJsonSerializer *_settingsSerializer;
 
 public:
   HttpAdapter(
       Logger *logger,
       FileSystem *fileSystem,
-      StateOwner *stateOwner);
+      StateOwner *stateOwner,
+      CarSettingsJsonSerializer *settingsSerializer);
 
   bool setup();
 
@@ -33,17 +35,17 @@ private:
 
   void handleAdminPage();
 
-  void handleBootstrapMinCss();
-
-  void handleBootstrapMinJs();
-
   void handleJQuery();
 
-  void handlePopper();
+  void handleCustomStyles();
 
-  void handleSliderCss();
+  void handlePostState();
 
-  void handleState();
+  void handleGetSettings();
+
+  void handlePostSettings();
+
+  void handlePostSettingsReset();
 
   void sendFile(String path, String contentType);
 

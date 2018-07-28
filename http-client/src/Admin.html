@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/styles/custom.css">
-    <script src="/external_js/jquery-3.3.1.min.js"></script>
+    <script src="/externaljs/jquery-3.3.1.min.js"></script>
 </head>
 
 <body>
@@ -40,9 +40,9 @@
 
         function applyState(data) {
             console.log(data);
-            $("#engineForwardPower").val(data["engineForwardPower"]);
-            $("#engineBackwardPower").val(data["engineBackwardPower"]);
-            $("#engineAcceleration").val(data["engineAcceleration"]);
+            if (data["engineForwardPower"]) $("#engineForwardPower").val(data["engineForwardPower"]);
+            if (data["engineBackwardPower"]) $("#engineBackwardPower").val(data["engineBackwardPower"]);
+            if (data["engineAcceleration"]) $("#engineAcceleration").val(data["engineAcceleration"]);
         };
 
         function beginAsync(asyncAction) {
@@ -68,7 +68,7 @@
             console.log("requesting state on load");
 
             beginAsync(time =>
-                $.get("/api/settings")
+                $.getJSON("/api/settings")
                     .done(data => applyState(data))
                     .always(() => endAsync(() => { }, time)));
         });
@@ -77,20 +77,43 @@
             event.preventDefault();
             console.log("applying state");
 
-            beginAsync(time =>
-                $.post("/api/settings", $("form").serialize())
-                    .always(endAsync(() => { }, time)));
+            json = getFormJson($("form"));
+
+            beginAsync(time => {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/settings",
+                    data: json,
+                    contentType: "application/json",
+                    dataType: "json"
+                }).always(endAsync(() => { }, time));
+            });
         });
 
         $("#resetButton").click(function (event) {
             event.preventDefault();
             console.log("resetting state");
 
-            beginAsync(time =>
-                $.post("/api/settings/reset", $("form").serialize())
-                    .done(data => applyState(data))
-                    .always(() => endAsync(() => { }, time)));
+            beginAsync(time => {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/settings/reset",
+                    data: "{}",
+                    contentType: "application/json",
+                    dataType: "json"
+                }).always(endAsync(() => { }, time));
+            });
         });
+
+        function getFormJson($form) {
+            var result = {
+                engineForwardPower: $("input[name=engineForwardPower]").val(),
+                engineBackwardPower: $("input[name=engineBackwardPower]").val(),
+                engineAcceleration: $("input[name=engineAcceleration]").val(),
+            };
+
+            return JSON.stringify(result);
+        }
     </script>
 </body>
 

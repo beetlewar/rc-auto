@@ -12,6 +12,8 @@ public:
 
   CarSettings deserializeCarSettings(String str);
 
+  String serializeCarSettings(CarSettings settings);
+
 private:
   float parseFloat(JsonObject *obj, String name, float defaultValue);
 };

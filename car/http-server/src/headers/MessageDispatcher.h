@@ -22,6 +22,6 @@ public:
   void loop();
 
   private:
-  bool shouldSendState(const RemoteCarState *carState, unsigned long time);
-  void sendState(const CarState *carState, unsigned long time);
+  bool shouldSendState(RemoteCarState *carState, unsigned long time);
+  void sendState(CarState *carState, CarSettings *settings,unsigned long time);
 };

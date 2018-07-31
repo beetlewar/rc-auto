@@ -13,12 +13,16 @@ Car::Car(Logger *logger)
     _lastGas = 0;
     _lastWheel = 0;
 
+    _forwardPower = ENGINE_FORWARD_POWER;
+    _backwardPower = ENGINE_BACKWARD_POWER;
+    _acceleration = ENGINE_ACCELERATION_POWER;
+
     _state = CAR_STATE_ALIVE;
 }
 
 bool Car::setup()
 {
-    _engine->setGas(0);
+    _engine->setGas(0, 0, 0);
 
     _wheel->setRotation(0);
 
@@ -29,13 +33,19 @@ void Car::setState(
     unsigned long keepAliveTime,
     unsigned long serverTime,
     float gas,
-    float wheel)
+    float wheel,
+    float forwardPower,
+    float backwardPower,
+    float accelerationPower)
 {
     _lastUpdateTime = millis();
     _lastKeepAliveTime = keepAliveTime;
     _lastServerTime = serverTime;
     _lastGas = gas;
     _lastWheel = wheel;
+    _forwardPower = forwardPower;
+    _backwardPower = backwardPower;
+    _acceleration = accelerationPower;
 }
 
 void Car::loop()
@@ -49,12 +59,12 @@ void Car::loop()
 
     if (_state == CAR_STATE_ALIVE)
     {
-        _engine->setGas(_lastGas);
+        _engine->setGas(_lastGas, _forwardPower, _backwardPower);
         _wheel->setRotation(_lastWheel);
     }
     else
     {
-        _engine->setGas(0);
+        _engine->setGas(0, 0, 0);
         _wheel->setRotation(0);
     }
 }

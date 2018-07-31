@@ -6,7 +6,10 @@ Engine::Engine(Logger *logger)
     _servo.attach(ENGINE_PIN, ENGINE_MAX_BACKWARD, ENGINE_MAX_FORWARD);
 }
 
-void Engine::setGas(float value)
+void Engine::setGas(
+    float value,
+    float forwardPower,
+    float backwardPower)
 {
     if (value > 1.0f || value < -1.0f)
     {
@@ -17,11 +20,11 @@ void Engine::setGas(float value)
 
     if (value >= 0)
     {
-        gas *= ENGINE_FORWARD_POWER;
+        gas *= forwardPower;
     }
     else
     {
-        gas *= ENGINE_BACKWARD_POWER;
+        gas *= backwardPower;
     }
 
     int pulseWidth = ENGINE_NEUTRAL + (ENGINE_MAX_FORWARD - ENGINE_NEUTRAL) * gas;

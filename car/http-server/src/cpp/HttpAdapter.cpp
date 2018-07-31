@@ -4,12 +4,14 @@ HttpAdapter::HttpAdapter(
     Logger *logger,
     FileSystem *fileSystem,
     StateOwner *stateOwner,
-    CarSettingsJsonSerializer *settingsSerializer)
+    CarSettingsJsonSerializer *settingsSerializer,
+    CarSettingsRepository *settingsRepository)
 {
     _logger = logger;
     _fileSystem = fileSystem;
     _stateOwner = stateOwner;
     _settingsSerializer = settingsSerializer;
+    _settingsRepository = settingsRepository;
 }
 
 void HttpAdapter::loop()
@@ -84,18 +86,10 @@ void HttpAdapter::handleCustomStyles()
     sendFile("/styles/custom.css", "text/css");
 }
 
-void HttpAdapter::handleGetSettings()
-{
-    _logger->println("Get settings handled.");
-
-    const String settingsJson =
-        "{ " + String("\"engineForwardPower\": \"0.33\"") + " }";
-
-    _server.send(200, "application/json", settingsJson);
-}
-
 void HttpAdapter::handlePostState()
 {
+    _logger->println("Handling POST state.");
+
     if (!_server.hasArg("plain"))
     {
         _logger->println("No car state body received");
@@ -112,12 +106,27 @@ void HttpAdapter::handlePostState()
     CarState state(remoteCarState, millis());
     _stateOwner->setCarState(state);
 
-    _logger->println("State handled.");
     _server.send(200);
+
+    _logger->println("POST state handled.");
+}
+
+void HttpAdapter::handleGetSettings()
+{
+    _logger->println("Handling GET settings.");
+
+    CarSettings settings = _settingsRepository->getSettings();
+    String settingsJson = _settingsSerializer->serializeCarSettings(settings);
+
+    _server.send(200, "application/json", settingsJson);
+
+    _logger->println("GET settings handled.");
 }
 
 void HttpAdapter::handlePostSettings()
 {
+    _logger->println("Handling POST settings.");
+
     if (!_server.hasArg("plain"))
     {
         _logger->println("No settings body received");
@@ -126,21 +135,33 @@ void HttpAdapter::handlePostSettings()
     };
 
     String body = _server.arg("plain");
-    _logger->println(body);
 
     CarSettings settings = _settingsSerializer->deserializeCarSettings(body);
-    _logger->println(String(settings.EngineForwardPower()) +
-                     ", " + String(settings.EngineBackwardPower()) +
-                     ", " + String(settings.EngineAcceleration()));
 
-    _logger->println("Post settings handled.");
+    _settingsRepository->saveSettings(settings);
+
     _server.send(200);
+
+    _logger->println("POST settings handled.");
 }
 
 void HttpAdapter::handlePostSettingsReset()
 {
-    _logger->println("Post reset settings handled.");
-    _server.send(200);
+    _logger->println("Handling POST reset settings.");
+
+    CarSettings defaultSettings = CarSettings(
+        ENGINE_FORWARD_POWER,
+        ENGINE_BACKWARD_POWER,
+        ENGINE_ACCELERATION_POWER);
+
+    _settingsRepository->saveSettings(defaultSettings);
+
+    CarSettings settings = _settingsRepository->getSettings();
+    String settingsJson = _settingsSerializer->serializeCarSettings(settings);
+
+    _server.send(200, "application/json", settingsJson);
+
+    _logger->println("POST reset settings handled.");
 }
 
 void HttpAdapter::sendFile(String path, String contentType)

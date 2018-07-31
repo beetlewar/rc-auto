@@ -10,5 +10,8 @@ class Engine
 
   public:
     Engine(Logger *logger);
-    void setGas(float value);
+    void setGas(
+      float value,
+      float forwardPower,
+      float backwardPower);
 };

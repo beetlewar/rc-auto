@@ -43,3 +43,17 @@ File FileSystem::openRead(String path)
 
     return file;
 }
+
+void FileSystem::writeContent(String path, String content)
+{
+    File file = SPIFFS.open(path, "w");
+
+    if (!file)
+    {
+        _logger->println("Failed to open/create file " + path);
+        return;
+    }
+
+    file.print(content);
+    file.close();
+}

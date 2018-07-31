@@ -101,7 +101,9 @@
                     data: "{}",
                     contentType: "application/json",
                     dataType: "json"
-                }).always(endAsync(() => { }, time));
+                })
+                    .done(data => applyState(data))
+                    .always(endAsync(() => { }, time));
             });
         });
 

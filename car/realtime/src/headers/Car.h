@@ -21,6 +21,9 @@ private:
   unsigned long _lastUpdateTime;
   float _lastGas;
   float _lastWheel;
+  float _forwardPower;
+  float _backwardPower;
+  float _acceleration;
   int _state;
 
 public:
@@ -34,7 +37,10 @@ public:
       unsigned long keepAliveTime,
       unsigned long serverTime,
       float gas,
-      float wheel);
+      float wheel,
+      float forwardPower,
+      float backwardPower,
+      float accelerationPower);
 
 private:
   int checkState();

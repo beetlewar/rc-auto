@@ -16,15 +16,16 @@ MessageDispatcher::MessageDispatcher(
 
 void MessageDispatcher::loop()
 {
-    const CarState carState = _stateOwner->getCarState();
+    CarState carState = _stateOwner->getCarState();
     unsigned long time = millis();
     if (shouldSendState(&carState.State, time))
     {
-        sendState(&carState, time);
+        CarSettings settings = _stateOwner->getCarSettings();
+        sendState(&carState, &settings, time);
     }
 }
 
-bool MessageDispatcher::shouldSendState(const RemoteCarState *carState, unsigned long time)
+bool MessageDispatcher::shouldSendState(RemoteCarState *carState, unsigned long time)
 {
     unsigned long elapsed = time - _lastSendTime;
 
@@ -44,7 +45,10 @@ bool MessageDispatcher::shouldSendState(const RemoteCarState *carState, unsigned
     return false;
 }
 
-void MessageDispatcher::sendState(const CarState *carState, unsigned long time)
+void MessageDispatcher::sendState(
+    CarState *carState,
+    CarSettings *settings,
+    unsigned long time)
 {
     _logger->println("Sending car state message");
 
@@ -52,7 +56,10 @@ void MessageDispatcher::sendState(const CarState *carState, unsigned long time)
         time,
         carState->KeepAliveTime,
         carState->State.Gas,
-        carState->State.Wheel);
+        carState->State.Wheel,
+        settings->EngineForwardPower(),
+        settings->EngineBackwardPower(),
+        settings->EngineAcceleration());
 
     uint8_t buffer[sizeof(CarStateMessage)];
 

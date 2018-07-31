@@ -1,5 +1,8 @@
 #include "Includes.h"
 
+const int STATE_BUF_SIZE = 200;
+const int SETTINGS_BUF_SIZE = 200;
+
 CarSettingsJsonSerializer::CarSettingsJsonSerializer(Logger *logger)
 {
     _logger = logger;
@@ -7,7 +10,7 @@ CarSettingsJsonSerializer::CarSettingsJsonSerializer(Logger *logger)
 
 RemoteCarState CarSettingsJsonSerializer::deserializeRemoteCarState(String str)
 {
-    StaticJsonBuffer<200> jsonBuffer;
+    StaticJsonBuffer<STATE_BUF_SIZE> jsonBuffer;
 
     String upperStr = str;
     upperStr.toUpperCase();
@@ -28,7 +31,7 @@ RemoteCarState CarSettingsJsonSerializer::deserializeRemoteCarState(String str)
 
 CarSettings CarSettingsJsonSerializer::deserializeCarSettings(String str)
 {
-    StaticJsonBuffer<200> jsonBuffer;
+    StaticJsonBuffer<SETTINGS_BUF_SIZE> jsonBuffer;
 
     String upperStr = str;
     upperStr.toUpperCase();
@@ -48,6 +51,33 @@ CarSettings CarSettingsJsonSerializer::deserializeCarSettings(String str)
     return CarSettings(engineForwardPower, engineBackwardPower, engineAcceleration);
 }
 
+String CarSettingsJsonSerializer::serializeCarSettings(CarSettings settings)
+{
+    StaticJsonBuffer<SETTINGS_BUF_SIZE> jsonBuffer;
+
+    JsonObject &root = jsonBuffer.createObject();
+
+    if (settings.EngineForwardPower() != UNSPECIFIED_SETTINGS_FLOAT_VALUE)
+    {
+        root["engineForwardPower"] = settings.EngineForwardPower();
+    }
+
+    if (settings.EngineBackwardPower() != UNSPECIFIED_SETTINGS_FLOAT_VALUE)
+    {
+        root["engineBackwardPower"] = settings.EngineBackwardPower();
+    }
+
+    if (settings.EngineAcceleration() != UNSPECIFIED_SETTINGS_FLOAT_VALUE)
+    {
+        root["engineAcceleration"] = settings.EngineAcceleration();
+    }
+
+    String result;
+    root.printTo(result);
+
+    return result;
+}
+
 float CarSettingsJsonSerializer::parseFloat(JsonObject *obj, String name, float defaultValue)
 {
     if (!obj->containsKey(name))
@@ -56,6 +86,11 @@ float CarSettingsJsonSerializer::parseFloat(JsonObject *obj, String name, float 
     }
 
     float value = (*obj)[name].as<float>();
+
+    if (value == defaultValue)
+    {
+        return defaultValue;
+    }
 
     if (value < -1)
     {

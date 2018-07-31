@@ -13,4 +13,6 @@ class FileSystem
     bool setup();
 
     File openRead(String path);
+
+    void writeContent(String path, String content);
 };

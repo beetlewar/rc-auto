@@ -5,31 +5,31 @@ class SerialSerializer
   public:
     unsigned long serialize(const CarStateMessage *message, uint8_t *destination)
     {
-        binaryULong unionServerTime;
-        unionServerTime.value = message->ServerTime;
-
-        memcpy(destination, unionServerTime.binary, sizeof(unionServerTime));
-        destination += sizeof(unionServerTime);
-
-        binaryULong keepAliveTime;
-        keepAliveTime.value = message->KeepAliveTime;
-
-        memcpy(destination, keepAliveTime.binary, sizeof(keepAliveTime));
-        destination += sizeof(keepAliveTime);
-
-        binaryFloat gas;
-        gas.value = message->Gas;
-
-        memcpy(destination, gas.binary, sizeof(gas));
-        destination += sizeof(gas);
-
-        binaryFloat wheel;
-        wheel.value = message->Wheel;
-
-        memcpy(destination, wheel.binary, sizeof(wheel));
-        destination += sizeof(wheel);
+        destination = writeULong(message->ServerTime, destination);
+        destination = writeULong(message->KeepAliveTime, destination);
+        destination = writeFloat(message->Gas, destination);
+        destination = writeFloat(message->Wheel, destination);
+        destination = writeFloat(message->EngineForwardPower, destination);
+        destination = writeFloat(message->EngineBackwardPower, destination);
+        destination = writeFloat(message->AccelerationPower, destination);
 
         return sizeof(CarStateMessage);
+    }
+
+    uint8_t *writeULong(unsigned long value, uint8_t *destination)
+    {
+        binaryULong bul;
+        bul.value = value;
+        memcpy(destination, bul.binary, sizeof(bul));
+        return destination + sizeof(bul);
+    }
+
+    uint8_t *writeFloat(float value, uint8_t *destination)
+    {
+        binaryFloat bf;
+        bf.value = value;
+        memcpy(destination, bf.binary, sizeof(bf));
+        return destination + sizeof(bf);
     }
 
     CarStateMessage deserialize(uint8_t *bytes)
@@ -50,10 +50,25 @@ class SerialSerializer
         memcpy(wheel.binary, bytes, sizeof(wheel));
         bytes += sizeof(wheel);
 
+        binaryFloat engineForward;
+        memcpy(engineForward.binary, bytes, sizeof(engineForward));
+        bytes += sizeof(engineForward);
+
+        binaryFloat engineBackward;
+        memcpy(engineBackward.binary, bytes, sizeof(engineBackward));
+        bytes += sizeof(engineBackward);
+
+        binaryFloat acceleration;
+        memcpy(acceleration.binary, bytes, sizeof(acceleration));
+        bytes += sizeof(acceleration);
+
         return CarStateMessage(
             serverTime.value,
             keepAliveTime.value,
             gas.value,
-            wheel.value);
+            wheel.value,
+            engineForward.value,
+            engineBackward.value,
+            acceleration.value);
     }
 };

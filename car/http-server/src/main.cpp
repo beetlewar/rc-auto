@@ -12,24 +12,27 @@ SerialSerializer *serialSerializer = NULL;
 HttpAdapter *httpAdapter = NULL;
 UdpAdapter *udpAdapter = NULL;
 CarSettingsJsonSerializer *settingsSerializer = NULL;
+CarSettingsRepository *settingsRepository = NULL;
 
 void setup()
 {
     logger = new Logger();
 
     serialSerializer = new SerialSerializer();
-    settingsSerializer = new CarSettingsJsonSerializer(logger);
-    stateOwner = new StateOwner();
+    stateOwner = new StateOwner(logger);
     fileSystem = new FileSystem(logger);
+    settingsSerializer = new CarSettingsJsonSerializer(logger);
+    settingsRepository = new CarSettingsRepository(logger, fileSystem, settingsSerializer, stateOwner);
     accessPoint = new WiFiAccessPoint(logger);
     transmitter = new SerialTransmitter(logger);
     messageDispatcher = new MessageDispatcher(logger, stateOwner, transmitter, serialSerializer);
-    httpAdapter = new HttpAdapter(logger, fileSystem, stateOwner, settingsSerializer);
+    httpAdapter = new HttpAdapter(logger, fileSystem, stateOwner, settingsSerializer, settingsRepository);
     udpAdapter = new UdpAdapter(logger, stateOwner);
 
     initialized =
         logger->setup(9600) &&
         fileSystem->setup() &&
+        settingsRepository->setup() &&
         accessPoint->setup() &&
         transmitter->setup() &&
         httpAdapter->setup() &&

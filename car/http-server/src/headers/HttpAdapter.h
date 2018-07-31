@@ -10,13 +10,15 @@ private:
   FileSystem *_fileSystem;
   StateOwner *_stateOwner;
   CarSettingsJsonSerializer *_settingsSerializer;
+  CarSettingsRepository *_settingsRepository;
 
 public:
   HttpAdapter(
       Logger *logger,
       FileSystem *fileSystem,
       StateOwner *stateOwner,
-      CarSettingsJsonSerializer *settingsSerializer);
+      CarSettingsJsonSerializer *settingsSerializer,
+      CarSettingsRepository *settingsRepository);
 
   bool setup();
 

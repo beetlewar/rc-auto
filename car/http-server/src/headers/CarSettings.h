@@ -29,11 +29,24 @@ class CarSettings
         _engineAcceleration = settings._engineAcceleration;
     }
 
+    CarSettings merge(CarSettings another)
+    {
+        return CarSettings(
+            select(_engineForwardPower, another._engineForwardPower),
+            select(_engineBackwardPower, another._engineBackwardPower),
+            select(_engineAcceleration, another._engineAcceleration));
+    }
+
     float EngineForwardPower() { return _engineForwardPower; }
     float EngineBackwardPower() { return _engineBackwardPower; }
     float EngineAcceleration() { return _engineAcceleration; }
 
   private:
+    float select(float thisValue, float anotherValue)
+    {
+        return anotherValue == UNSPECIFIED_SETTINGS_FLOAT_VALUE ? thisValue : anotherValue;
+    }
+
     float normalize(float value)
     {
         if (value == UNSPECIFIED_SETTINGS_FLOAT_VALUE)

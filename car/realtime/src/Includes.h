@@ -11,6 +11,7 @@
 #include "..\..\..\shared\headers\Logger.h"
 
 #include "headers\Engine.h"
+#include "headers\Accelerator.h"
 #include "headers\ServoWheel.h"
 #include "headers\Car.h"
 #include "headers\MessageHandler.h"

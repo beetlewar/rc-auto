@@ -18,17 +18,12 @@ bool UdpAdapter::setup()
 void UdpAdapter::loop()
 {
     int packetSize = _udp.parsePacket();
-    int avail = _udp.available();
-    if (avail > 0)
-    {
-        _logger->println(avail);
-    }
     if (packetSize == 0)
     {
         return;
     }
 
-    _logger->println("Received: " + String(packetSize) + " via udp");
+    // _logger->println("Received: " + String(packetSize) + " via udp");
 
     int expectedPacketSize = sizeof(RemoteCarState);
     if (packetSize != expectedPacketSize)

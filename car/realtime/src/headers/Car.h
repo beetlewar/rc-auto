@@ -16,6 +16,10 @@ private:
   Engine *_engine;
   ServoWheel *_wheel;
 
+  Accelerator *_accelerator;
+  float _accelerationPower;
+
+  unsigned long _lastLoopTime;
   unsigned long _lastKeepAliveTime;
   unsigned long _lastServerTime;
   unsigned long _lastUpdateTime;
@@ -23,7 +27,6 @@ private:
   float _lastWheel;
   float _forwardPower;
   float _backwardPower;
-  float _acceleration;
   int _state;
 
 public:
@@ -45,4 +48,6 @@ public:
 private:
   int checkState();
   void logStateChange(int state);
+  float accelerate();
+  bool gasIncreased(float gas, float acceleratedGas);
 };

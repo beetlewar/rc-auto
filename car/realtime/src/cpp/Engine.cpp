@@ -11,9 +11,13 @@ void Engine::setGas(
     float forwardPower,
     float backwardPower)
 {
-    if (value > 1.0f || value < -1.0f)
+    if (value > 1)
     {
-        return;
+        value = 1;
+    }
+    else if (value < -1)
+    {
+        value = -1;
     }
 
     float gas = value;

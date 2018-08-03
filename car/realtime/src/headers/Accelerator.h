@@ -12,7 +12,6 @@ class Accelerator
     float accelerate(float targetValue, float accelerationPower);
 
   private:
-    double getCurrentAccelerationFor(float targetValue, double currentAcceleration);
     double animateAcceleration(
         double currentAcceleration,
         float targetValue,

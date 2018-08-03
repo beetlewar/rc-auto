@@ -72,7 +72,7 @@ void Car::loop()
     {
         float gas = _accelerator->accelerate(_lastGas, _accelerationPower);
 
-        // _logger->println(gas);
+        _logger->println(gas);
 
         _engine->setGas(gas, _forwardPower, _backwardPower);
 

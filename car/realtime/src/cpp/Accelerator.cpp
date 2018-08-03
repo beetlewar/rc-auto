@@ -12,7 +12,18 @@ float Accelerator::accelerate(
 {
     uint64_t time = micros();
 
-    double acceleration = getCurrentAccelerationFor(targetValue, _acceleratedValue);
+    if (targetValue <= 0)
+    {
+        _acceleratedValue = 0;
+        _accelerationTime = time;
+        return targetValue;
+    }
+
+    double acceleration = _acceleratedValue;
+    if (acceleration > targetValue)
+    {
+        acceleration = targetValue;
+    }
 
     acceleration = animateAcceleration(
         acceleration,
@@ -29,29 +40,6 @@ float Accelerator::accelerate(
     return acceleration;
 }
 
-double Accelerator::getCurrentAccelerationFor(float targetValue, double currentAcceleration)
-{
-    if (targetValue >= 0 && currentAcceleration < 0)
-    {
-        return 0;
-    }
-    if (targetValue < 0 && currentAcceleration > 0)
-    {
-        return 0;
-    }
-
-    if (targetValue >= 0 && targetValue < currentAcceleration)
-    {
-        return targetValue;
-    }
-    if (targetValue < 0 && targetValue > currentAcceleration)
-    {
-        return targetValue;
-    }
-
-    return currentAcceleration;
-}
-
 double Accelerator::animateAcceleration(
     double currentAcceleration,
     float targetValue,
@@ -64,28 +52,18 @@ double Accelerator::animateAcceleration(
 
     if (accelerationDurationMicros <= 0)
     {
-        return targetValue >= 0 ? 1 : -1; // max value
+        return 2; // max value
     }
 
     uint64_t elapsed = time - lastTime;
 
     double increment = (double)elapsed / accelerationDurationMicros;
-    if (targetValue < 0)
-    {
-        increment = -increment;
-    }
-
     return currentAcceleration + increment;
 }
 
 double Accelerator::normalizeAcceleration(float targetValue, double acceleratedValue)
 {
-    if (targetValue >= 0 && acceleratedValue > targetValue)
-    {
-        return targetValue;
-    }
-
-    if (targetValue < 0 && acceleratedValue < targetValue)
+    if (acceleratedValue > targetValue)
     {
         return targetValue;
     }

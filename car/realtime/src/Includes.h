@@ -3,6 +3,7 @@
 #include "Arduino.h"
 #include "SoftwareSerial.h"
 #include "Servo.h"
+#include "ESP8266WiFi.h"
 
 #include "..\..\..\shared\headers\Const.h"
 #include "..\..\..\shared\headers\Unions.h"
